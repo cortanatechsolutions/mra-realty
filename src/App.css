@@ -1,0 +1,11 @@
+.animate-spin {
+  @apply animate-spin;
+}
+
+.border-t-2 {
+  border-top-width: 2px;
+}
+
+.border-b-2 {
+  border-bottom-width: 2px;
+}
