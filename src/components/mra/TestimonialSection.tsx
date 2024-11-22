@@ -41,17 +41,17 @@ const TestimonialSection: React.FC = () => {
   };
 
   return (
-    <div className="bg-brand-active text-white py-12 px-4">
+    <div className="bg-brand-active text-white py-28 px-4">
       <div className="max-w-7xl mx-auto">
         {/* Header and Testimonials in the Same Row */}
-        <div className="flex flex-col lg:flex-row">
+        <div className="flex flex-col lg:flex-row justify-between">
           <h2
             id="header"
-            className="text-2xl font-regular text-left mr-10 pt-0 lg:text-left lg:mb-0 lg:w-1/4"
+            className="text-3xl font-regular text-left mr-10 pt-0 lg:text-left lg:mb-0 lg:w-1/4"
           >
             What our clients are saying about us?
           </h2>
-          <div id="testimonials" className="lg:w-2/3 overflow-hidden relative">
+          <div id="testimonials" className="lg:w-2/4 overflow-hidden relative">
             {/* Testimonials container */}
             <div
               className="flex transition-transform duration-500 ease-in-out"
@@ -108,7 +108,7 @@ const TestimonialSection: React.FC = () => {
         </div>
 
         {/* Logos Section */}
-        <div className="mt-12 text-center">
+        <div className="mt-12 text-center pd-10">
           <p className="text-regular">
             We have properties with the major real estate developers such as
             the following:

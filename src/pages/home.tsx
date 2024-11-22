@@ -8,6 +8,9 @@ import FacebookFeed from "../components/Home/FacebookFeed";
 import FeaturedSection from "../components/mra/FeaturedSection";
 import WhyWorkWithUs from "../components/mra/WhyWorkWithUs";
 import TestimonialSection from "../components/mra/TestimonialSection";
+import AboutYourAgent from "../components/mra/AboutYourAgentSection";
+import StayUpToDate from "../components/mra/StayUpToDateSection";
+import ScrollToTopButton from "../utils/ScrollToTopButton";
 
 const HomePage: React.FC<{ data: IAppData }> = ({ data }) => {
   return (
@@ -18,9 +21,9 @@ const HomePage: React.FC<{ data: IAppData }> = ({ data }) => {
       <WhyWorkWithUs />
       <FacebookFeed />
       <TestimonialSection />
-      <BlogList />
-      <Team data={data.team} /> {/* Render the Team component */}
-      <CallToAction />
+      <AboutYourAgent />
+      <StayUpToDate/>
+      <ScrollToTopButton />
       {/*<ContactUs /> */}
     </>
   );

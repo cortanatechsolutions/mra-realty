@@ -66,7 +66,7 @@ const App: React.FC = () => {
         {/* Catch all unmatched routes */}
         <Route path="*" element={<ErrorPage404 />} />
       </Routes>
-      <Footer data={data.navbar} />
+      <Footer />
     </>
   );
 };
