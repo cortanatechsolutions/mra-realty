@@ -91,14 +91,14 @@ const TestimonialSection: React.FC = () => {
             <div className="flex space-x-4 pt-8 pb-18">
               <button
                 onClick={handlePrev}
-                className="btn btn-transparent text-white"
+                className="btn btn-transparent btn-primary"
                 disabled={currentIndex === 0} // Disable if at the first testimonial
               >
                 &lt;
               </button>
               <button
                 onClick={handleNext}
-                className="btn btn-transparent text-white"
+                className="btn btn-transparent btn-primary"
                 disabled={currentIndex === testimonials.length - 1} // Disable if at the last testimonial
               >
                 &gt;

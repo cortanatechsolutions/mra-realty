@@ -55,7 +55,7 @@ module.exports = {
               },
               primary: {
                 default: "#CD9B43",
-                active: "#1c75bc",
+                active: "#FFFFFF",
                 light: "#EFF6FF",
                 clarity: "rgba(27, 132, 255, 0.20)",
                 inverse: "#ffffff",
@@ -89,8 +89,8 @@ module.exports = {
                 inverse: "#ffffff",
               },
               dark: {
-                default: "#1E2129",
-                active: "#111318",
+                default: "#0E2442",
+                active: "#CD9B43",
                 light: "#F9F9F9",
                 clarity: "rgba(30, 33, 41, 0.20)",
                 inverse: "#ffffff",
@@ -103,15 +103,11 @@ module.exports = {
                 inverse: "#4B5675",
               },
               secondary: {
-                default: "#ffffff",
-                active: "#F9F9F9",
+                default: "#0E2442",
+                active: "#CD9B4",
                 light: "#F9F9F9",
                 clarity: "rgba(249, 249, 249, 0.20)",
                 inverse: "#4B5675",
-              },
-              mra: {
-                default: "#0E2442",
-                active: "#CD9B43",
               },
             },
             dark: {
@@ -298,7 +294,7 @@ module.exports = {
           clarity: "rgba(24, 25, 31, 0.50)",
         },
         theme: {
-          default: "#0E2442",
+          default: "#CD9B43",
           secondary: "#707070",
           black: "#000000",
           royalBlue: "#4169e1",

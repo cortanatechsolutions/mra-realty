@@ -81,7 +81,7 @@ const Navbar: React.FC<NavbarProps> = ({ data }) => {
                 e.preventDefault();
                 handleNavClick(link.href);
               }}
-              className="text-lg py-2 leading-6 text-white hover:text-theme-royalBlue"
+              className="text-lg py-2 leading-6 text-white hover:text-theme-default"
             >
               {link.name}
             </a>
@@ -90,7 +90,7 @@ const Navbar: React.FC<NavbarProps> = ({ data }) => {
         <div className="hidden lg:flex lg:justify-end gap-x-4">
           <button
             onClick={openModal}
-            className="btn btn-transparent text-white"
+            className="btn btn-transparent btn-primary"
           >
             Refer a Property
           </button>
@@ -131,7 +131,7 @@ const Navbar: React.FC<NavbarProps> = ({ data }) => {
                       handleNavClick(link.href);
                       setMobileMenuOpen(false);
                     }}
-                    className="-mx-3 block px-3 py-2 text-base font-heading leading-7 text-gray-900 hover:text-theme-royalBlue"
+                    className="-mx-3 block px-3 py-2 text-base font-heading leading-7 text-gray-900 hover:text-theme-default"
                   >
                     {link.name}
                   </a>

@@ -84,7 +84,7 @@ const FeaturedSection: React.FC = () => {
             </a>
           ))}
         </div>
-        <button className="btn btn-primary btn-lg mt-8 px-6 py-2">
+        <button className="btn btn-dark btn-variant mt-8 px-6 py-2">
           More Properties
         </button>
       </div>

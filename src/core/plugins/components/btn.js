@@ -226,37 +226,6 @@ export default plugin(({ addComponents, theme }) => {
     },
   });
 
-  // Transparent varaint
-  addComponents({
-    ".btn-transparent": {
-      display: "inline-flex",
-      "align-items": "center",
-      cursor: "pointer",
-      "line-height": "1",
-      "border-radius": theme("custom.components.common.borderRadius.btn"),
-      height: theme("custom.components.btn.DEFAULT.height"),
-      "padding-left": theme("custom.components.btn.DEFAULT.px"),
-      "padding-right": theme("custom.components.btn.DEFAULT.px"),
-      gap: theme("custom.components.btn.DEFAULT.gap"),
-      border: "1px solid transparent",
-      "font-weight": theme("custom.components.btn.DEFAULT.fontWeight"),
-      "font-size": theme("custom.components.btn.DEFAULT.fontSize"),
-      "background-color": "transparent", // Transparent background
-      border: "2px solid var(--tw-primary)", // Add border
-      "&:hover, &:focus, &:active, &.active": {
-        "background-color": "transparent", // Keep the background transparent on hover
-        border: "2px solid var(--tw-primary-active)", // Change border color on hover
-        color: "var(--tw-primary-active)", // Change text color on hover
-      },
-      "&.btn-sm": {
-        "font-size": theme("fontSize.xs"),
-      },
-      "&.btn-lg": {
-        "font-size": theme("fontSize.sm"),
-      },
-    },
-  });
-
   // Tabs
   addComponents({
     ".btn-tabs": {
@@ -460,6 +429,15 @@ export default plugin(({ addComponents, theme }) => {
           "&:hover, &:focus, &:active, &.active": {
             "background-color": `var(--tw-${color}-active)`,
             "box-shadow": `var(--tw-${color}-box-shadow)`,
+            color: `var(--tw-${color})`,
+          },
+        },
+        [`.btn-${color}.btn-variant`]: {
+          color: theme("colors.white"),
+          "background-color": `var(--tw-${color})`,
+          "&:hover, &:focus, &:active, &.active": {
+            "background-color": `var(--tw-${color}-active)`,
+            "box-shadow": `var(--tw-${color}-box-shadow)`,
           },
         },
         [`.btn-outline.btn-${color}`]: {
@@ -487,9 +465,9 @@ export default plugin(({ addComponents, theme }) => {
             color: `var(--tw-${color})`,
           },
           "&:hover, &:focus, &:active, &.active": {
-            color: `var(--tw-${color}-active)`,
-            "border-color": "var(--tw-gray-300)",
-            "background-color": "var(--tw-light-active)",
+            color: `var(--tw-${color})`,
+            "border-color": `var(--tw-${color})`,
+            "background-color": `transparent`,
             "box-shadow": "var(--tw-default-box-shadow)",
             i: {
               color: `var(--tw-${color}-inverse)`,
