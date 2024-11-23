@@ -23,10 +23,11 @@ const agentDetails: AgentProps = {
 const AboutYourAgent: React.FC = () => {
   return (
     <div className="bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto flex items-center justify-between space-x-8">
-        <div className="flex-1 mr-28">
+      <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center lg:items-start justify-between space-y-8 lg:space-y-0 lg:space-x-8">
+        {/* Text Section */}
+        <div className="flex-1 text-center lg:text-left py-20 lg:mr-28">
           <h2 className="text-3xl font-regular text-gray-900 mb-4">About Your Agent</h2>
-          <p className="text-regular text-gray-700 mb-8 mt-10">{agentDetails.description}</p>
+          <p className="text-regular text-gray-700 mb-8">{agentDetails.description}</p>
           <a
             href={agentDetails.contactLink}
             className="btn btn-primary btn-lg"
@@ -34,11 +35,13 @@ const AboutYourAgent: React.FC = () => {
             Contact Me
           </a>
         </div>
-        <div className="rounded-3xl overflow-hidden">
+
+        {/* Image Section */}
+        <div className="rounded-3xl overflow-hidden w-48 sm:w-56 md:w-64 lg:w-80 xl:w-96">
           <img
             src={agentDetails.imageUrl}
             alt={`Photo of ${agentDetails.name}`}
-            className="h-full object-cover"
+            className="w-full h-full object-cover"
           />
         </div>
       </div>

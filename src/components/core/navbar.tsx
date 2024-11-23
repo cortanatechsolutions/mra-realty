@@ -109,7 +109,7 @@ const Navbar: React.FC<NavbarProps> = ({ data }) => {
           <div className="flex items-center justify-between">
             <a href="/" className="-m-1.5 p-1.5">
               <span className="sr-only">{data.brand}</span>
-              <img alt="" src={`/default-logo.svg`} className="h-20 w-auto" />
+              <img alt="" src={`/default-logo-light.svg`} className="h-20 w-auto" />
             </a>
             <button
               onClick={() => setMobileMenuOpen(false)}

@@ -1,32 +1,51 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import Papa from "papaparse";
 
+// Define the Testimonial type
 type Testimonial = {
-  name: string;
-  role: string;
-  image: string;
-  message: string;
+  Id: string;
+  Name: string;
+  Role: string;
+  Image: string;
+  Message: string;
 };
 
-const testimonials: Testimonial[] = [
-  {
-    name: "Janine Corazon",
-    role: "Manager",
-    image: "/images/Manager.jpg",
-    message:
-      "Working with Monic was an absolute delight! From our first conversation, she made us feel comfortable and excited about the home-buying process. Monic took the time to understand exactly what we were looking for and found options that fit our style, budget, and dreams. She was always available to answer our questions, no matter how big or small, and she guided us through every step with patience and expertise. Thanks to Monic, we found our perfect home in Lucena City, and we couldn't be happier. If you're looking for a real estate agent who genuinely cares and makes the process fun, Monic is the one!",
-  },
-  {
-    name: "Janine Coronel",
-    role: "Manager",
-    image: "/images/Manager.jpg",
-    message:
-      "XXX Working with Monic was an absolute delight! From our first conversation, she made us feel comfortable and excited about the home-buying process. Monic took the time to understand exactly what we were looking for and found options that fit our style, budget, and dreams. She was always available to answer our questions, no matter how big or small, and she guided us through every step with patience and expertise. Thanks to Monic, we found our perfect home in Lucena City, and we couldn't be happier. If you're looking for a real estate agent who genuinely cares and makes the process fun, Monic is the one!",
-  },
-  // Add more testimonials here
-];
+// Google Sheets CSV URL
+const GOOGLE_SHEET_CSV_URL =
+  "https://docs.google.com/spreadsheets/d/e/2PACX-1vQIBCbBBocsY7K-QE0CX2wt0l58CjDUelMfp_CdZf2qxQhTo9RuBLij8fRAtH0VftK5MQ9Xy1J9KrrZ/pub?gid=2367261&single=true&output=csv";
 
 const TestimonialSection: React.FC = () => {
+  const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchTestimonials = async () => {
+      try {
+        const response = await fetch(GOOGLE_SHEET_CSV_URL);
+        const csvText = await response.text();
+
+        // Parse the CSV data
+        Papa.parse<Testimonial>(csvText, {
+          header: true, // Use the first row as the header
+          skipEmptyLines: true, // Skip empty rows
+          complete: (result) => {
+            setTestimonials(result.data); // Set the parsed data
+            setLoading(false);
+          },
+          error: (error: any) => {
+            console.error("Error parsing CSV:", error);
+            setLoading(false);
+          },
+        });
+      } catch (error) {
+        console.error("Error fetching testimonials:", error);
+        setLoading(false);
+      }
+    };
+
+    fetchTestimonials();
+  }, []);
 
   const handlePrev = () => {
     if (currentIndex > 0) {
@@ -43,96 +62,96 @@ const TestimonialSection: React.FC = () => {
   return (
     <div className="bg-brand-active text-white py-28 px-4">
       <div className="max-w-7xl mx-auto">
-        {/* Header and Testimonials in the Same Row */}
+        {/* Header and Testimonials */}
         <div className="flex flex-col lg:flex-row justify-between">
-          <h2
-            id="header"
-            className="text-3xl font-regular text-left mr-10 pt-0 lg:text-left lg:mb-0 lg:w-1/4"
-          >
+          <h2 className="text-3xl pb-10 font-regular text-left lg:w-1/4">
             What our clients are saying about us?
           </h2>
-          <div id="testimonials" className="lg:w-2/4 overflow-hidden relative">
-            {/* Testimonials container */}
-            <div
-              className="flex transition-transform duration-500 ease-in-out"
-              style={{
-                transform: `translateX(-${currentIndex * 100}%)`,
-              }}
-            >
-              {testimonials.map((testimonial, index) => (
-                <div
-                  key={index}
-                  className="flex-shrink-0 w-full px-4"
-                >
-                  <div className="flex items-center justify-between">
-                  <div className="flex items-center">
-                    <img
-                      src={testimonial.image}
-                      alt={testimonial.name}
-                      className="w-16 h-16 rounded-full mr-4"
-                    />
-                    <div>
-                      <h3 className="font-regular text-lg">{testimonial.name}</h3>
-                      <p className="text-sm">{testimonial.role}</p>
-                    </div>
-                  </div>
-                  <img
-                    alt=""
-                    src={`/images/quote.svg`}
-                    className="w-10 h-10 text-yellow-400"
-                  />
-                  </div>
-                  <blockquote className="text-sm mt-4">{testimonial.message}</blockquote>
-                </div>
-              ))}
-            </div>
 
-            {/* Navigation Buttons */}
-            <div className="flex space-x-4 pt-8 pb-18">
-              <button
-                onClick={handlePrev}
-                className="btn btn-transparent btn-primary"
-                disabled={currentIndex === 0} // Disable if at the first testimonial
-              >
-                &lt;
-              </button>
-              <button
-                onClick={handleNext}
-                className="btn btn-transparent btn-primary"
-                disabled={currentIndex === testimonials.length - 1} // Disable if at the last testimonial
-              >
-                &gt;
-              </button>
-            </div>
+          <div className="lg:w-2/4 overflow-hidden relative">
+            {loading ? (
+              <p>Loading testimonials...</p>
+            ) : (
+              <>
+                {/* Testimonials Carousel */}
+                <div
+                  className="flex transition-transform duration-500 ease-in-out"
+                  style={{
+                    transform: `translateX(-${currentIndex * 100}%)`,
+                  }}
+                >
+                  {testimonials.map((testimonial, index) => (
+                    <div key={index} className="flex-shrink-0 w-full px-4">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center">
+                          <img
+                            src={testimonial.Image}
+                            alt={testimonial.Name}
+                            className="w-16 h-16 rounded-full mr-4"
+                          />
+                          <div>
+                            <h3 className="font-regular text-lg">
+                              {testimonial.Name}
+                            </h3>
+                            <p className="text-sm">{testimonial.Role}</p>
+                          </div>
+                        </div>
+                        <img
+                          alt=""
+                          src="/images/quote.svg"
+                          className="w-10 h-10 text-yellow-400"
+                        />
+                      </div>
+                      <blockquote className="text-sm mt-4">
+                        {testimonial.Message}
+                      </blockquote>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Navigation Buttons */}
+                <div className="flex space-x-4 pt-8">
+                  <button
+                    onClick={handlePrev}
+                    className="btn btn-transparent btn-primary"
+                    disabled={currentIndex === 0}
+                  >
+                    &lt;
+                  </button>
+                  <button
+                    onClick={handleNext}
+                    className="btn btn-transparent btn-primary"
+                    disabled={currentIndex === testimonials.length - 1}
+                  >
+                    &gt;
+                  </button>
+                </div>
+              </>
+            )}
           </div>
         </div>
 
         {/* Logos Section */}
-        <div className="mt-12 text-center pd-10">
+        <div className="mt-12 text-center">
           <p className="text-regular">
-            We have properties with the major real estate developers such as
-            the following:
+            We have properties with the major real estate developers such as:
           </p>
           <div className="flex flex-wrap justify-center gap-24 mt-10">
-            <img src={`/images/SMDC.svg`} alt="SMDC" className="h-10" />
-            <img src={`/images/Camella.svg`} alt="Camella" className="h-10" />
+            <img src="/images/SMDC.svg" alt="SMDC" className="h-10" />
+            <img src="/images/Camella.svg" alt="Camella" className="h-10" />
             <img
-              src={`/images/PhirstWhiteLogo.svg`}
+              src="/images/PhirstWhiteLogo.svg"
               alt="Phirst White Logo"
               className="h-10"
             />
-            <img src={`/images/Bellavita.svg`} alt="BellaVita" className="h-10" />
+            <img src="/images/Bellavita.svg" alt="BellaVita" className="h-10" />
+            <img src="/images/Palmville.svg" alt="Palmville" className="h-10" />
             <img
-              src={`/images/Palmville.svg`}
-              alt="Palmville"
-              className="h-10"
-            />
-            <img
-              src={`/images/CuestaVerdeWhite.svg`}
+              src="/images/CuestaVerdeWhite.svg"
               alt="Cuesta Verde"
               className="h-10"
             />
-            <img src={`/images/Ramaland.svg`} alt="Ramaland" className="h-10" />
+            <img src="/images/Ramaland.svg" alt="Ramaland" className="h-10" />
           </div>
         </div>
       </div>
