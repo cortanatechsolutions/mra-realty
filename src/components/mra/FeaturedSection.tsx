@@ -48,10 +48,10 @@ const FeaturedSection: React.FC = () => {
     <section className="relative isolate overflow-hidden text-center px-4 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto">
         <div className="mb-8">
-          <h2 className="text-2xl font-semibold text-gray-800">
+          <h2 className="text-2xl font-semibold text-white lg:text-gray-800">
             Our Featured Properties
           </h2>
-          <p className="text-gray-600 mt-2">
+          <p className="text-white lg:text-gray-600 mt-2">
             Check out the places below where you think your ideal home is here in the Philippines
           </p>
         </div>
@@ -75,7 +75,7 @@ const FeaturedSection: React.FC = () => {
                     alt={property.PropertyLocation}
                     className="w-full h-full object-cover"
                   />
-                  <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                  <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-50 group-hover:opacity-100 transition-opacity">
                     <h3 className="text-white text-lg font-bold">{property.PropertyLocation}</h3>
                   </div>
                 </a>
