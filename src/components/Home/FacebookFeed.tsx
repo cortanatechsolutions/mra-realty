@@ -119,7 +119,7 @@ const FacebookFeed: React.FC = () => {
   if (isLoading) {
     return (
       <section
-        id="FacebookFeed"
+        id="Updates"
         className="relative isolate overflow-hidden py-10 sm:py-20 bg-white dark:bg-gray-900"
       >
         <div className="max-w-6xl mx-auto text-center">

@@ -110,7 +110,7 @@ const TestimonialSection: React.FC = () => {
                 </div>
 
                 {/* Navigation Buttons */}
-                <div className="flex space-x-4 pt-8">
+                <div className="flex items-center justify-center lg:justify-start space-x-4 pt-8">
                   <button
                     onClick={handlePrev}
                     className="btn btn-transparent btn-primary"

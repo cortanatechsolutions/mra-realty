@@ -2,10 +2,10 @@
   "navbar": {
     "brand": "MRA Realty",
     "links": [
-      { "name": "Home", "href": "#PartnerWithUs" },
-      { "name": "Listing", "href": "#Testimonial" },
-      { "name": "Updates", "href": "#OurWork" },
-      { "name": "Contacts", "href": "#OurWork" }
+      { "name": "Home", "href": "#Home" },
+      { "name": "Listing", "href": "#featured" },
+      { "name": "Updates", "href": "#Updates" },
+      { "name": "Contacts", "href": "#ContactUs" }
     ],
     "megaMenu": [{}]
   },
@@ -17,46 +17,8 @@
       "href": "https://www.messenger.com/t/161490932676778"
     }
   },
-  "about": {
-    "title": "About Us",
-    "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
-  },
-  "services": {
-    "title": "Our Services",
-    "items": [
-      { "title": "Service 1", "description": "Description of Service 1" },
-      { "title": "Service 2", "description": "Description of Service 2" },
-      { "title": "Service 3", "description": "Description of Service 3" }
-    ]
-  },
   "contact": {
     "title": "Contact Us",
     "content": "For inquiries, please contact us using the form below."
-  },
-  "team": {
-    "title": "Meet our Team",
-    "members": [
-      {
-        "name": "Faithful Coronel",
-        "position": "Director of Operations / Founder",
-        "bio": "Faithful Coronel brings over a decade of expertise in Software Engineering, leading our team with visionary insight and technical prowess.",
-        "imageUrl": "/images/ceo.webp"
-      },
-      {
-        "name": "Titus Jr Laxa",
-        "position": "Director of Branding / Co-Founder",
-        "bio": "Titus Jr Laxa is a seasoned design expert with extensive experience in crafting innovative and user-centric designs.",
-        "imageUrl": "/images/cdo.webp"
-      },
-      {
-        "name": "Aiza Nosa",
-        "position": "Director of Administration / Co-Founder",
-        "bio": "Aiza Nosa excels in administration, ensuring seamless operations and strategic growth with a strong focus on organizational excellence.",
-        "imageUrl": "/images/cao.webp"
-      }
-    ]
-  },
-  "footer": {
-    "text": "© 2024 Your Company. All rights reserved."
   }
 }

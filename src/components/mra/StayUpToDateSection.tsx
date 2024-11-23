@@ -14,7 +14,7 @@ const StayUpToDate: React.FC = () => {
   };
 
   return (
-    <div className="bg-white py-52 px-4 sm:px-6 lg:px-8">
+    <section id="ContactUs" className="bg-white py-52 px-4 sm:px-6 lg:px-8">
       <div className="max-w-3xl mx-auto text-center">
         <div className="p-4 inline-block mb-6">
             <img src={`/images/stayuptodate.svg`} alt="Ramaland" className="h-20" />
@@ -37,7 +37,7 @@ const StayUpToDate: React.FC = () => {
           </div>
         </form>
       </div>
-    </div>
+    </section>
   );
 };
 
