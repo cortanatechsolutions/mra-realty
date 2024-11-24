@@ -1,11 +1,11 @@
-import React from "react";
+import { useState } from "react";
+import ModalForm from "../core/ContactFormModal";
 
 // Define the interface for the agent props
 interface AgentProps {
   imageUrl: string;
   name: string;
   description: string;
-  contactLink: string;
 }
 
 // Sample agent details (use a single object, not an array)
@@ -17,10 +17,13 @@ const agentDetails: AgentProps = {
     When she’s not sealing deals, you’ll find Monic exploring local cafés or discovering hidden gems around town, always on the lookout for the next must-see property. Ready to turn those real estate dreams into reality? Monic’s here to help you find your perfect place, with plenty of smiles along the way!
   `,
   imageUrl: "/images/ownerprofile.png", // Replace with the actual image URL
-  contactLink: "mailto:contact@monicalzola.com", // Replace with the actual contact link
 };
 
 const AboutYourAgent: React.FC = () => {
+  const [isModalOpen, setModalOpen] = useState(false);
+  const openModal = () => setModalOpen(true);
+  const closeModal = () => setModalOpen(false);
+
   return (
     <div className="bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center lg:items-start justify-between space-y-8 lg:space-y-0 lg:space-x-8">
@@ -28,12 +31,12 @@ const AboutYourAgent: React.FC = () => {
         <div className="flex-1 text-center lg:text-left py-20 lg:mr-28">
           <h2 className="text-3xl font-regular text-gray-900 mb-4">About Your Agent</h2>
           <p className="text-regular text-gray-700 mb-8">{agentDetails.description}</p>
-          <a
-            href={agentDetails.contactLink}
+          <button
+            onClick={openModal}
             className="btn btn-primary btn-lg"
           >
             Contact Me
-          </a>
+          </button>
         </div>
 
         {/* Image Section */}
@@ -45,6 +48,7 @@ const AboutYourAgent: React.FC = () => {
           />
         </div>
       </div>
+      <ModalForm isOpen={isModalOpen} onClose={closeModal} />
     </div>
   );
 };

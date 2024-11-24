@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import FacebookLogin from "react-facebook-login";
+import { useState } from "react";
+import FacebookLogin from "react-facebook-login-lite";
 import axios from "axios";
 
 const API_URL = import.meta.env.VITE_REACT_APP_API_URL;
@@ -92,11 +92,9 @@ const FacebookPageConnect = () => {
                   <div className="facebook-login">
                     <FacebookLogin
                       appId={FB_APP_ID}
-                      autoLoad={false}
-                      fields="name,email,picture"
-                      callback={responseFacebook}
-                      textButton="Login with Facebook"
-                      cssClass="btn btn-primary btn-lg"
+                      onSuccess={responseFacebook}
+                      onFailure={() => setError("Facebook login failed. Please try again.")}
+                      btnText="Login with Facebook"
                     />
                   </div>
                 ) : (

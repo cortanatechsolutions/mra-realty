@@ -1,5 +1,5 @@
-import { useState } from "react";
-import ModalForm from "../core/ContactFormModal";
+import React from "react";
+import { useHandleNavClick } from "../../hooks/useHandleNavClick";
 
 interface JumbotronProps {
   data: {
@@ -10,10 +10,8 @@ interface JumbotronProps {
 }
 
 const Home: React.FC<JumbotronProps> = ({ data }) => {
-  const [isModalOpen, setModalOpen] = useState(false);
-
-  const openModal = () => setModalOpen(true);
-  const closeModal = () => setModalOpen(false);
+  const featuredLink = "#featured";
+  const handleNavClick = useHandleNavClick();
 
   return (
     <section id="Home" className="overflow-hidden py-10 sm:py-8">
@@ -34,9 +32,8 @@ const Home: React.FC<JumbotronProps> = ({ data }) => {
               </p>
               <div className="mt-10 flex items-center justify-left gap-x-6">
                 <button
-                  onClick={openModal}
+                  onClick={() => handleNavClick(featuredLink)}
                   className="btn btn-primary btn-lg"
-                  data-modal-toggle="#modalForm"
                 >
                   {data.button.text}
                 </button>
@@ -45,7 +42,6 @@ const Home: React.FC<JumbotronProps> = ({ data }) => {
           </div>
         </div>
       </div>
-      <ModalForm isOpen={isModalOpen} onClose={closeModal} />
     </section>
   );
 };

@@ -11,8 +11,7 @@ type Testimonial = {
 };
 
 // Google Sheets CSV URL
-const GOOGLE_SHEET_CSV_URL =
-  "https://docs.google.com/spreadsheets/d/e/2PACX-1vQIBCbBBocsY7K-QE0CX2wt0l58CjDUelMfp_CdZf2qxQhTo9RuBLij8fRAtH0VftK5MQ9Xy1J9KrrZ/pub?gid=2367261&single=true&output=csv";
+const GOOGLE_SHEET_CSV_URL = import.meta.env.VITE_REACT_APP_TESTIMONIALS_GOOGLE_SHEET_CSV_URL
 
 const TestimonialSection: React.FC = () => {
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);

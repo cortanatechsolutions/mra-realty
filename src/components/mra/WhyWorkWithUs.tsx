@@ -1,6 +1,11 @@
-import React from "react";
+import { useState } from "react";
+import ModalForm from "../core/ContactFormModal";
 
 const WhyWorkWithUs: React.FC = () => {
+  const [isModalOpen, setModalOpen] = useState(false);
+  const openModal = () => setModalOpen(true);
+  const closeModal = () => setModalOpen(false);
+  
   return (
     <section className="bg-white py-16 px-4 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto text-center">
@@ -37,8 +42,12 @@ const WhyWorkWithUs: React.FC = () => {
           <h2 className="text-2xl">Fill up our form, or consult with us</h2>
           <p className="text-sm mt-2">There's no harm in asking. So, ask away!</p>
         </div>
-        <button className="btn btn-primary mt-6 md:mt-0">Inquire with us, don't be shy</button>
+        <button 
+        className="btn btn-primary mt-6 md:mt-0"
+        onClick={openModal}
+        >Inquire with us, don't be shy</button>
       </div>
+      <ModalForm isOpen={isModalOpen} onClose={closeModal} />
     </section>
   );
 };

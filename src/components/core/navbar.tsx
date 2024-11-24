@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
 import { Dialog, DialogPanel } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import ModalForm from "./ContactFormModal";
+import { useHandleNavClick } from "../../hooks/useHandleNavClick";
 
 interface NavbarProps {
   data: {
@@ -16,11 +16,9 @@ const Navbar: React.FC<NavbarProps> = ({ data }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isModalOpen, setModalOpen] = useState(false);
 
-  const location = useLocation();
-  const navigate = useNavigate();
-
   const openModal = () => setModalOpen(true);
   const closeModal = () => setModalOpen(false);
+  const handleNavClick = useHandleNavClick(); // Use the custom hook
 
   useEffect(() => {
     const handleScroll = () => {
@@ -33,18 +31,6 @@ const Navbar: React.FC<NavbarProps> = ({ data }) => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
-
-  const handleNavClick = (href: string) => {
-    const targetId = href.startsWith("#") ? href.substring(1) : null;
-
-    if (location.pathname !== "/" && targetId) {
-      // If the user is not on the homepage, navigate to the homepage and scroll to the section
-      navigate(`/${href}`);
-    } else if (targetId) {
-      // If the user is already on the homepage, smooth scroll to the section
-      document.getElementById(targetId)?.scrollIntoView({ behavior: "smooth" });
-    }
-  };
 
   return (
     <header

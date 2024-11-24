@@ -12,7 +12,7 @@ const Footer: React.FC = () => {
         {/* Logo */}
         <div className="my-4 md:my-0">
           <img
-            src="/default-logo-light.svg" // Replace with your logo's path
+            src="/default-logo-light.svg"
             alt="MRA Realty Logo"
             className="h-20 mx-auto md:mx-0"
           />
@@ -35,7 +35,7 @@ const Footer: React.FC = () => {
             <img src={`/images/email.svg`} alt="Send Email" className="h-4" />
           </a>
           <a
-            href="viber://chat?number=+123456789"
+            href="viber://chat/?number=%2B9988644998"
             className="text-gray-500 hover:text-gray-900"
           >
             <img src={`/images/viber.svg`} alt="Viber" className="h-4" />

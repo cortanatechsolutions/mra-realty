@@ -126,11 +126,11 @@ export const useForm = (onClose: () => void) => {
     </head>
     <body>
       <div class="header">
-        <img src="https://cortanatechsolutions.com/default-logo.svg" alt="Cortanatech Solutions Logo">
-        <h1>Cortanatech Solutions</h1>
-        <p>Your trusted business aid for Digital Innovation</p>
+        <img src="https://mra-realty.com/default-logo.svg" alt="MRA Realty Logo">
+        <h1>MRA Realty</h1>
+        <p>Your Gateway for New Beginners</p>
       </div>
-      <h2>New Inquiry from <i>cortanatechsolutions.com</i></h2>
+      <h2>New Inquiry from <i>mra-realty.com</i></h2>
       <p>You have received a new inquiry through the website. Below are the details:</p>
       <table>
         <tr>
@@ -140,10 +140,6 @@ export const useForm = (onClose: () => void) => {
         <tr>
           <td><strong>Email:</strong></td>
           <td>${email}</td>
-        </tr>
-        <tr>
-          <td><strong>Subject:</strong></td>
-          <td>${subject}</td>
         </tr>
         <tr>
           <td><strong>Message:</strong></td>

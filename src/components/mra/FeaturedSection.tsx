@@ -10,8 +10,7 @@ interface FeaturedProperties {
   PropertyRedirectUrl: string;
 }
 
-const GOOGLE_SHEET_CSV_URL =
-  "https://docs.google.com/spreadsheets/d/e/2PACX-1vQIBCbBBocsY7K-QE0CX2wt0l58CjDUelMfp_CdZf2qxQhTo9RuBLij8fRAtH0VftK5MQ9Xy1J9KrrZ/pub?gid=0&single=true&output=csv";
+const GOOGLE_SHEET_CSV_URL = import.meta.env.VITE_REACT_APP_FEATURED_GOOGLE_SHEET_CSV_URL;
 
 const FeaturedSection: React.FC = () => {
   const [featuredProperties, setFeaturedProperties] = useState<FeaturedProperties[]>([]);
