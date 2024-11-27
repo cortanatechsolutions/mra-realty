@@ -35,7 +35,9 @@ const Navbar: React.FC<NavbarProps> = ({ data }) => {
   return (
     <header
       className={`top-0 z-50 transition-shadow duration-300 ${
-        isScrolled ? "sticky bg-brand-active shadow-lg" : "bg-transparent"
+        isScrolled
+          ? "fixed w-full bg-brand-active shadow-lg"
+          : "bg-transparent"
       }`}
     >
       <nav

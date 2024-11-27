@@ -44,7 +44,7 @@ const FeaturedSection: React.FC = () => {
   }, []);
 
   return (
-    <section id="featured" className="relative isolate overflow-hidden text-center px-16 sm:px-20 lg:px-20 mt-0 lg:mt-32 xl:mt-0">
+    <section id="featured" className="relative isolate overflow-hidden text-center mt-20 px-16 sm:px-20 lg:px-20">
       <div className="max-w-8xl">
         <div className="mb-8">
           <h2 className="text-2xl font-semibold text-gray-800">
