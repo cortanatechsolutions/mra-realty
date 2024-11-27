@@ -67,7 +67,7 @@ const Navbar: React.FC<NavbarProps> = ({ data }) => {
                 e.preventDefault();
                 handleNavClick(link.href);
               }}
-              className="text-lg py-2 leading-6 text-white hover:text-theme-default"
+              className="text-sm py-2 leading-6 text-white hover:text-theme-default"
             >
               {link.name}
             </a>

@@ -20,9 +20,8 @@ const Home: React.FC<JumbotronProps> = ({ data }) => {
         src={`/images/web-banner.jpg`}
         className="absolute inset-0 -z-10 h-full w-full object-cover sm:object-center"
       />
-      <div className="max-w-sm pb-16 sm:max-w-6xl sm:pb-24 lg:pb-52 xl:pb-96">
+      <div className="pb-16 pr-20 sm:max-w-6xl sm:pb-24 lg:pb-52 xl:pb-96">
         <div className="pl-16 sm:pl-24 lg:pl-36 sm:pr-8 sm:pt-28">
-          <div className="sm:max-w-5xl">
             <div className="text-left">
               <h1 className="text-5xl font-semibold tracking-tight text-white sm:text-6xl lg:text-8xl">
                 {data.title}
@@ -38,7 +37,6 @@ const Home: React.FC<JumbotronProps> = ({ data }) => {
                   {data.button.text}
                 </button>
               </div>
-            </div>
           </div>
         </div>
       </div>
