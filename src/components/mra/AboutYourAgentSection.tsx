@@ -16,7 +16,7 @@ const agentDetails: AgentProps = {
 
     When she’s not sealing deals, you’ll find Monic exploring local cafés or discovering hidden gems around town, always on the lookout for the next must-see property. Ready to turn those real estate dreams into reality? Monic’s here to help you find your perfect place, with plenty of smiles along the way!
   `,
-  imageUrl: "/images/ownerprofile.png", // Replace with the actual image URL
+  imageUrl: "/images/ownerprofile.jpg", // Replace with the actual image URL
 };
 
 const AboutYourAgent: React.FC = () => {
