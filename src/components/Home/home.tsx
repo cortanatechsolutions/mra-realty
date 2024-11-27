@@ -17,7 +17,7 @@ const Home: React.FC<JumbotronProps> = ({ data }) => {
     <section id="Home" className="overflow-hidden py-10 sm:py-8">
       <img
         alt=""
-        src={`/images/web-banner.jpg`}
+        src={`/images/web-banner.svg`}
         className="absolute inset-0 -z-10 h-full w-full object-cover sm:object-center"
       />
       <div className="pb-16 pr-20 sm:max-w-6xl sm:pb-24 lg:pb-52 xl:pb-96">

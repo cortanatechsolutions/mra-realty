@@ -47,10 +47,10 @@ const FeaturedSection: React.FC = () => {
     <section id="featured" className="relative isolate overflow-hidden text-center px-16 sm:px-20 lg:px-20 mt-0 lg:mt-32 xl:mt-0">
       <div className="max-w-8xl">
         <div className="mb-8">
-          <h2 className="text-2xl font-semibold text-white lg:text-gray-800">
+          <h2 className="text-2xl font-semibold text-gray-800">
             Our Featured Properties
           </h2>
-          <p className="text-white lg:text-gray-600 mt-2">
+          <p className="text-gray-600 mt-2">
             Check out the places below where you think your ideal home is here in the Philippines
           </p>
         </div>
