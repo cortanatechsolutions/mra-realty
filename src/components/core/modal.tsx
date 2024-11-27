@@ -76,7 +76,7 @@ const Modal: React.FC<ModalProps> = ({
             <img
               alt="modal"
               src={imageSrc}
-              className="hidden lg:block rounded-r-lg shadow-lg max-h-full object-cover"
+              className={`hidden lg:block rounded-r-lg shadow-lg sm:${width}`}
               onError={(e) => {
                 (e.target as HTMLImageElement).style.display = "none";
               }}

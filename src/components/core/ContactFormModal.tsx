@@ -68,7 +68,7 @@ const ModalForm: React.FC<ModalFormProps> = ({ isOpen, onClose }) => {
             <h1 className="text-xl font-normal tracking-tight text-gray-900 sm:text-4xl">
               Connect with Us!
             </h1>
-            <p className="py-3 font-xxs text-gray-600">
+            <p className="py-3 font-sm text-gray-600">
               Thank you for reaching out! We’ve received your inquiry and will
               review it carefully. Our team will get back to you as soon as
               possible to assist with your real estate needs. Talk soon!
