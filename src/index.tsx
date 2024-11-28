@@ -11,7 +11,7 @@ import { HashRouter } from "react-router-dom";
 const secretRecaptchaKey = import.meta.env.VITE_REACT_APP_RECAPTCHA_KEY;
 
 if (!secretRecaptchaKey) {
-  throw new Error("Recaptcha key is not defined");
+  throw new Error("Recaptcha key is not defined!");
 }
 
 
