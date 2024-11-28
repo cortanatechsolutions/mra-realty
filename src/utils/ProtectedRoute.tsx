@@ -3,6 +3,7 @@ import { Navigate, useLocation } from "react-router-dom";
 import axios from "axios";
 
 const API_URL = import.meta.env.VITE_REACT_APP_API_URL;
+const APP_NAME = import.meta.env.VITE_REACT_APP_NAME;
 
 interface ProtectedRouteProps {
   children: React.ReactNode; // Components to render when token is valid
@@ -18,16 +19,15 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
     const validateToken = async () => {
       const params = new URLSearchParams(location.search);
       const token = params.get("token");
-      const clientName = params.get('name');
 
-      if (!clientName && !token) {
+      if (!token) {
         setIsValidToken(false);
         setIsLoading(false);
         return;
       }
 
       try {
-        const response = await axios.get(`${API_URL}/validate-token?name=${clientName}&token=${token}`);
+        const response = await axios.get(`${API_URL}/validate-token?name=${APP_NAME}&token=${token}`);
         setIsValidToken(response.data.valid || false);
       } catch (err) {
         console.error("Error validating token:", err);

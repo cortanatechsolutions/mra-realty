@@ -3,8 +3,10 @@ import { sendEmail } from "../services/emailService";
 import { EmailModel } from "../models/EmailModel";
 import { getToken } from "../api/authApi";
 import { logMessage } from "./logger";
+import { useSiteSettings } from "../utils/SiteSettingsContext";
 
 export const useForm = (onClose: () => void) => {
+  const { settings, getSetting } = useSiteSettings();
   const [fullname, setFullname] = useState("");
   const [email, setEmail] = useState("");
   const [subject, setSubject] = useState("");
@@ -74,9 +76,12 @@ export const useForm = (onClose: () => void) => {
     setCombinedError("");
     setSending(true);
 
+    const toEmail = getSetting("Email");
+    const fromEmail = import.meta.env.VITE_REACT_APP_SUPPORT_EMAIL;
+
     const emailModel: EmailModel = {
-      toEmail: import.meta.env.VITE_REACT_APP_SUPPORT_EMAIL!,
-      fromEmail: import.meta.env.VITE_REACT_APP_SUPPORT_EMAIL!,
+      toEmail: toEmail,
+      fromEmail: fromEmail,
       subject: "You have received an inquiry from " + fullname,
       body: `
     <html>

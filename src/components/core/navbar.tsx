@@ -3,6 +3,7 @@ import { Dialog, DialogPanel } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import ModalForm from "./ContactFormModal";
 import { useHandleNavClick } from "../../hooks/useHandleNavClick";
+import { useSiteSettings } from "../../utils/SiteSettingsContext";
 
 interface NavbarProps {
   data: {
@@ -12,6 +13,7 @@ interface NavbarProps {
 }
 
 const Navbar: React.FC<NavbarProps> = ({ data }) => {
+  const { settings, getSetting } = useSiteSettings();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isModalOpen, setModalOpen] = useState(false);
@@ -76,12 +78,14 @@ const Navbar: React.FC<NavbarProps> = ({ data }) => {
           ))}
         </div>
         <div className="hidden lg:flex lg:justify-end gap-x-4">
-          <button
-            onClick={openModal}
+          <a
+            href={getSetting("ReferAPropertyLink")}
+            target="_blank"
+            rel="noopener noreferrer"
             className="btn btn-transparent btn-primary"
           >
-            Refer a Property
-          </button>
+            {getSetting("ReferAPropertyButtonName")}
+          </a>
           <button onClick={openModal} className="btn btn-primary">
             Inquire about Property
           </button>
@@ -131,7 +135,7 @@ const Navbar: React.FC<NavbarProps> = ({ data }) => {
                   }}
                   className="btn btn-primary"
                 >
-                  Get Started
+                  Inquire about Property
                 </button>
               </div>
             </div>

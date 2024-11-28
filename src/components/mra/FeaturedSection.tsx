@@ -2,6 +2,8 @@ import Papa from "papaparse";
 import { useEffect, useState } from "react";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import { fetchGoogleSheetData } from "../../utils/fetchGoogleSheetData";
+import { useSiteSettings } from "../../utils/SiteSettingsContext";
 
 interface FeaturedProperties {
   Id: string;
@@ -13,34 +15,23 @@ interface FeaturedProperties {
 const GOOGLE_SHEET_CSV_URL = import.meta.env.VITE_REACT_APP_FEATURED_GOOGLE_SHEET_CSV_URL;
 
 const FeaturedSection: React.FC = () => {
+  const { settings, getSetting } = useSiteSettings();
   const [featuredProperties, setFeaturedProperties] = useState<FeaturedProperties[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchGoogleSheetData = async () => {
+    const loadData = async () => {
       try {
-        const response = await fetch(GOOGLE_SHEET_CSV_URL);
-        const csvText = await response.text();
-
-        Papa.parse<FeaturedProperties>(csvText, {
-          header: true,
-          skipEmptyLines: true,
-          complete: (result) => {
-            setFeaturedProperties(result.data);
-            setLoading(false);
-          },
-          error: (error: any) => {
-            console.error("Error parsing CSV:", error);
-            setLoading(false);
-          },
-        });
+        const data = await fetchGoogleSheetData<FeaturedProperties>(GOOGLE_SHEET_CSV_URL);
+        setFeaturedProperties(data);
       } catch (error) {
-        console.error("Error fetching Google Sheet data:", error);
+        console.error("Error loading featured properties:", error);
+      } finally {
         setLoading(false);
       }
     };
 
-    fetchGoogleSheetData();
+    loadData();
   }, []);
 
   return (
@@ -85,7 +76,7 @@ const FeaturedSection: React.FC = () => {
 </div>
 
         <a
-          href="https://www.facebook.com/mrarealty"
+          href={getSetting("MorePropertiesButtonLink")}
           target="_blank"
           rel="noopener noreferrer"
           className="btn btn-dark btn-variant mt-8 px-6 py-2"

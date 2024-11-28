@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import Papa from "papaparse";
+import { fetchGoogleSheetData } from "../../utils/fetchGoogleSheetData";
 
 // Define the Testimonial type
 type Testimonial = {
@@ -19,31 +20,18 @@ const TestimonialSection: React.FC = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchTestimonials = async () => {
+    const loadData = async () => {
       try {
-        const response = await fetch(GOOGLE_SHEET_CSV_URL);
-        const csvText = await response.text();
-
-        // Parse the CSV data
-        Papa.parse<Testimonial>(csvText, {
-          header: true, // Use the first row as the header
-          skipEmptyLines: true, // Skip empty rows
-          complete: (result) => {
-            setTestimonials(result.data); // Set the parsed data
-            setLoading(false);
-          },
-          error: (error: any) => {
-            console.error("Error parsing CSV:", error);
-            setLoading(false);
-          },
-        });
+        const data = await fetchGoogleSheetData<Testimonial>(GOOGLE_SHEET_CSV_URL);
+        setTestimonials(data);
       } catch (error) {
         console.error("Error fetching testimonials:", error);
+      } finally {
         setLoading(false);
       }
     };
 
-    fetchTestimonials();
+    loadData();
   }, []);
 
   const handlePrev = () => {

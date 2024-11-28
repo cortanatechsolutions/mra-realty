@@ -4,16 +4,10 @@ import Navbar from "../core/navbar";
 import IAppData from "../interfaces/IAppData";
 import dataJson from "../../data/data.json";
 import Loading from "../core/loading";
-
-interface JumbotronProps {
-  data: {
-    title: string;
-    description: string;
-    button: { text: string; href: string };
-  };
-}
+import { useSiteSettings } from "../../utils/SiteSettingsContext";
 
 const Home: React.FC = () => {
+  const { settings, getSetting } = useSiteSettings();
   const featuredLink = "#featured";
   const handleNavClick = useHandleNavClick();
 
@@ -61,10 +55,10 @@ const Home: React.FC = () => {
           <div className="pl-16 sm:pl-24 lg:pl-36 sm:pr-8 sm:pt-28">
             <div className="text-left">
               <h1 className="text-5xl font-semibold tracking-tight text-white sm:text-6xl lg:text-8xl">
-                {data?.jumbotron.title}
+                {getSetting("HeroHeaderText")}
               </h1>
               <p className="sm:max-w-2xl mt-6 font-regular text-sm sm:text-lg lg:text-lg leading-8 text-white">
-                {data?.jumbotron.description}
+              {getSetting("HeroHeaderDescription")}
               </p>
               <div className="mt-10 flex items-center justify-left gap-x-6">
                 <button

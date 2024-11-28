@@ -1,5 +1,6 @@
 import { useState } from "react";
 import ModalForm from "../core/ContactFormModal";
+import { useSiteSettings } from "../../utils/SiteSettingsContext";
 
 // Define the interface for the agent props
 interface AgentProps {
@@ -20,6 +21,7 @@ const agentDetails: AgentProps = {
 };
 
 const AboutYourAgent: React.FC = () => {
+  const { settings, getSetting } = useSiteSettings();
   const [isModalOpen, setModalOpen] = useState(false);
   const openModal = () => setModalOpen(true);
   const closeModal = () => setModalOpen(false);
@@ -30,7 +32,7 @@ const AboutYourAgent: React.FC = () => {
         {/* Text Section */}
         <div className="flex-1 text-center lg:text-left py-20 lg:mr-28">
           <h2 className="text-3xl font-regular text-gray-900 mb-4">About Your Agent</h2>
-          <p className="text-regular text-gray-700 mb-8">{agentDetails.description}</p>
+          <p className="text-regular text-gray-700 mb-8">{getSetting("AboutYourAgentDescription")}</p>
           <button
             onClick={openModal}
             className="btn btn-primary btn-lg"
