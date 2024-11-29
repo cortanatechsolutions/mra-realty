@@ -37,6 +37,7 @@
   },
   "devDependencies": {
     "@types/crypto-js": "^4.2.2",
+    "@types/facebook-js-sdk": "^3.3.12",
     "@types/node": "^20.14.10",
     "@types/nodemailer": "^6.4.15",
     "@types/papaparse": "^5.3.15",

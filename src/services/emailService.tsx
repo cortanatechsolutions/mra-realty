@@ -39,7 +39,7 @@ export const sendEmail = async (email: EmailModel): Promise<void> => {
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "multipart/form-data",
-        "Access-Control-Allow-Origin": "https://cortanatechsolutions.com",
+        "Access-Control-Allow-Origin": "https://mra-realty.com",
         "Access-Control-Allow-Methods": "DELETE, POST, GET, OPTIONS",
         "Access-Control-Allow-Headers":
           "Content-Type, Authorization, X-Requested-With, Origin, Accept",

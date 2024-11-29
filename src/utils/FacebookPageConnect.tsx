@@ -1,17 +1,78 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import FacebookLogin from "react-facebook-login-lite";
 import axios from "axios";
 
 const API_URL = import.meta.env.VITE_REACT_APP_API_URL;
 const FB_APP_ID = import.meta.env.VITE_REACT_APP_FACEBOOK_APP_ID;
 
+
+// Load Facebook SDK dynamically
+const loadFacebookSDK = (): Promise<void> => {
+  return new Promise((resolve) => {
+    if (document.getElementById("facebook-jssdk")) {
+      resolve();
+      return;
+    }
+    const js = document.createElement("script");
+    js.id = "facebook-jssdk";
+    js.src = "https://connect.facebook.net/en_US/sdk.js";
+    js.onload = () => resolve();
+    const fjs = document.getElementsByTagName("script")[0];
+    fjs.parentNode?.insertBefore(js, fjs);
+  });
+};
+
 const FacebookPageConnect = () => {
+  const [isSdkInitialized, setIsSdkInitialized] = useState(false);
   const [userAccessToken, setUserAccessToken] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  
   const [facebookPages, setFacebookPages] = useState<any[]>([]);
   const [selectedPage, setSelectedPage] = useState<any>(null);
-  const [error, setError] = useState<string | null>(null);
   const [isPageConnected, setIsPageConnected] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
+
+  // Load and initialize Facebook SDK
+  useEffect(() => {
+    const initializeFacebookSDK = async () => {
+      await loadFacebookSDK();
+
+      window.FB.init({
+        appId: import.meta.env.VITE_REACT_APP_FACEBOOK_APP_ID || "",
+        cookie: true,
+        xfbml: true,
+        version: "v17.0", // Use your desired API version
+      });
+
+      setIsSdkInitialized(true);
+      console.log("Facebook SDK Initialized");
+    };
+
+    initializeFacebookSDK();
+  }, []);
+
+  // Handle Facebook login
+  const handleLogin = () => {
+    if (!isSdkInitialized) {
+      setError("Facebook SDK is not yet initialized.");
+      return;
+    }
+
+    window.FB.login(
+      (response: fb.StatusResponse) => {
+        if (response.authResponse) {
+          console.log("Logged in successfully:", response.authResponse);
+          setUserAccessToken(response.authResponse.accessToken);
+          responseFacebook(response.authResponse);
+        } else {
+          setError("Facebook login failed.");
+        }
+      },
+      { scope: "email,public_profile,pages_show_list" } // Permissions you need
+    );
+  };
+
 
   // Facebook Login Success handler
   const responseFacebook = async (response: any) => {
@@ -89,14 +150,9 @@ const FacebookPageConnect = () => {
                 )}
 
                 {!userAccessToken ? (
-                  <div className="facebook-login">
-                    <FacebookLogin
-                      appId={FB_APP_ID}
-                      onSuccess={responseFacebook}
-                      onFailure={() => setError("Facebook login failed. Please try again.")}
-                      btnText="Login with Facebook"
-                    />
-                  </div>
+                  <button onClick={handleLogin} className="btn-login">
+                  Login with Facebook
+                  </button>
                 ) : (
                   <div>
                     <h2 className="text-xl text-white">Select a Facebook Page to Connect:</h2>
