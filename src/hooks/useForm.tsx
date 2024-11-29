@@ -131,7 +131,7 @@ export const useForm = (onClose: () => void) => {
     </head>
     <body>
       <div class="header">
-        <img src="https://mra-realty.com/default-logo.svg" alt="MRA Realty Logo">
+        <img src="https://mra-realty.com/mrarealty-default-logo.png" alt="MRA Realty Logo">
         <h1>MRA Realty</h1>
         <p>Your Gateway for New Beginners</p>
       </div>
