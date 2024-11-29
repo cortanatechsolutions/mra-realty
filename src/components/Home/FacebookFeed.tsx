@@ -4,13 +4,10 @@ import {
   HeartIcon,
   ShareIcon,
   ChatBubbleOvalLeftEllipsisIcon,
-  /**  ArrowUpOnSquareIcon, **/
 } from "@heroicons/react/24/outline";
 import { formatDistanceToNow, parseISO } from "date-fns";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-
-/** import ShareMenu from "../core/ShareMenu"; **/
 
 // Define your types
 interface ImageAttachment {
@@ -44,7 +41,7 @@ interface Post {
       source: string;
       description: string;
       thumbnails: { data: { uri: string }[] };
-    }[];
+    }[]; 
   };
 }
 
@@ -105,16 +102,6 @@ const FacebookFeed: React.FC = () => {
   const loadMorePosts = () => {
     setVisibleCount((prevCount) => prevCount + 3); // Load 2 more rows (6 posts) on click
   };
-
-  /** 
-  const handleMenuToggle = (postId: string) => {
-    setShowMenu((prev) => (prev === postId ? null : postId));
-  };
-
-  const handleCloseMenu = () => {
-    setShowMenu(null);
-  };
-  **/
 
   if (isLoading) {
     return (
@@ -177,6 +164,30 @@ const FacebookFeed: React.FC = () => {
     );
   }
 
+  // Check if data is empty and display message
+  if (!data?.posts?.length) {
+    return (
+      <section
+        id="Updates"
+        className="relative isolate overflow-hidden py-10 sm:py-20 bg-white dark:bg-gray-900"
+      >
+        <div className="max-w-6xl mx-auto text-center">
+          <div className="mx-auto max-w-6xl lg:mx-0">
+            <h2 className="text-2xl font-semibold text-gray-800">
+              Our Latest Announcements
+            </h2>
+          </div>
+          <div className="mx-auto mt-10">
+            {/* No posts message */}
+            <p className="text-xl text-gray-500 dark:text-gray-400">
+              Content will be available shortly. Please check back soon!
+            </p>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section
       id="Updates"
@@ -230,68 +241,44 @@ const FacebookFeed: React.FC = () => {
                       </p>
                     )}
                   </div>
-
-                  {/* Third Row: Image/Video Thumbnail */}
-                  {post.full_picture && (
-                    <div className="relative">
-                      <img
-                        src={post.full_picture}
-                        alt="Post Media"
-                        className="w-full h-auto"
-                      />
+                  {/* Third Row: Media */}
+                  <div className="relative">
+                    <div>
+                      {post.full_picture && (
+                        <img
+                          className="w-full h-[300px] object-cover"
+                          src={post.full_picture}
+                          alt="Post media"
+                        />
+                      )}
                     </div>
-                  )}
-                  {post.videos?.data?.[0]?.thumbnails?.data?.[0]?.uri && (
-                    <div className="relative">
-                      <img
-                        src={post.videos.data[0].thumbnails.data[0].uri}
-                        alt="Video Thumbnail"
-                        className="w-full h-auto"
-                      />
+                  </div>
+                  <hr className="border-gray-200 dark:border-gray-700" />
+                  {/* Last Row: Reactions, Shares, Comments */}
+                  <div className="p-4 flex items-center justify-center gap-8 text-sm text-gray-500 dark:text-gray-400">
+                    <div className="flex items-center space-x-2">
+                      <HeartIcon className="h-5 w-5" />
+                      <span>{post.reactions?.summary.total_count}</span>
                     </div>
-                  )}
+                    <div className="flex items-center space-x-2">
+                      <ShareIcon className="h-5 w-5" />
+                      <span>{post.shares?.count}</span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <ChatBubbleOvalLeftEllipsisIcon className="h-5 w-5" />
+                      <span>{post.comments?.summary.total_count}</span>
+                    </div>
+                  </div>
                 </a>
-
-                {/* Divider Line */}
-                <hr className="border-gray-200 dark:border-gray-700" />
-
-                {/* Fourth Row: Reactions, Shares, Comments, and Share Link */}
-                <div className="p-4 flex items-center justify-center gap-8 text-sm text-gray-500 dark:text-gray-400">
-                  <div className="flex items-center space-x-2">
-                    <HeartIcon className="h-5 w-5 text-red-500" />
-                    <p>{post.reactions?.summary.total_count || 0}</p>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <ShareIcon className="h-5 w-5 text-blue-500" />
-                    <p>{post.shares?.count || 0}</p>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <ChatBubbleOvalLeftEllipsisIcon className="h-5 w-5 text-gray-500" />
-                    <p>{post.comments?.summary.total_count || 0}</p>
-                  </div>
-                  {/** 
-                  <button
-                    onClick={() => handleMenuToggle(post.id)}
-                    className="text-blue-600 dark:text-blue-400 hover:underline flex items-center space-x-1"
-                  >
-                    <ArrowUpOnSquareIcon className="h-5 w-5 text-blue-600 dark:text-blue-400" />
-                    <span>Share</span>
-                  </button>                  
-                  {showMenu === post.id && (
-                    <ShareMenu
-                      postUrl={`https://www.facebook.com/${post.id}`}
-                      onClose={handleCloseMenu}
-                    />
-                  )}**/}
-                </div>
               </div>
             ))}
           </div>
-
-          {/* Show More Button */}
           {visiblePosts.length < data.posts.length && (
-            <div className="flex justify-center mt-4">
-              <button onClick={loadMorePosts} className="btn btn-primary">
+            <div className="flex justify-center mt-6">
+              <button
+                onClick={loadMorePosts}
+                className="px-4 py-2 bg-blue-600 text-white rounded-full hover:bg-blue-700"
+              >
                 Show More
               </button>
             </div>
