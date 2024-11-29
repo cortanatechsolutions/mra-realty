@@ -1,6 +1,11 @@
 import React from 'react';
+import { useSiteSettings } from '../../utils/SiteSettingsContext';
 
 const Footer: React.FC = () => {
+  const { settings, getSetting } = useSiteSettings();
+  const emailTo = getSetting("email");
+  const officialFbPage = getSetting("OfficialFBPage");
+  const officialViberNumber = getSetting("OfficialContactNumber");
   return (
     <footer className="bg-gray-50 py-6">
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center px-4 sm:px-6 lg:px-8">
@@ -21,7 +26,7 @@ const Footer: React.FC = () => {
         {/* Social Icons */}
         <div className="flex space-x-4">
           <a
-            href="https://facebook.com"
+            href={officialFbPage}
             target="_blank"
             rel="noopener noreferrer"
             className="text-gray-500 hover:text-gray-900"
@@ -29,13 +34,13 @@ const Footer: React.FC = () => {
             <img src={`/images/facebook.svg`} alt="Facebook" className="h-4" />
           </a>
           <a
-            href="mailto:info@mrarealty.com"
+            href={`mailto:${emailTo}`}
             className="text-gray-500 hover:text-gray-900"
           >
             <img src={`/images/email.svg`} alt="Send Email" className="h-4" />
           </a>
           <a
-            href="viber://chat/?number=%2B9988644998"
+            href={`viber://chat?number=%2B${officialViberNumber}`}
             className="text-gray-500 hover:text-gray-900"
           >
             <img src={`/images/viber.svg`} alt="Viber" className="h-4" />
