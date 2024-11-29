@@ -12,6 +12,7 @@ import FacebookPageConnect from "./utils/FacebookPageConnect";
 import { fetchGoogleSheetData } from "./utils/fetchGoogleSheetData";
 import Loading from "./components/core/loading";
 import ISiteSettings from "./components/interfaces/ISiteSettings";
+import { SiteSettingsProvider } from "./utils/SiteSettingsContext";
 
 const GOOGLE_SHEET_CSV_URL = import.meta.env.VITE_REACT_APP_SITESETTINGS_GOOGLE_SHEET_CSV_URL;
 
@@ -44,24 +45,27 @@ const App: React.FC = () => {
   
   return (
     <>
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/privacyPolicy" element={<PrivacyPolicyPage />} />
-        <Route path="/termsOfService" element={<TermsOfServicePage />} />
-        {/* Add other routes here */}
+      <SiteSettingsProvider>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/privacyPolicy" element={<PrivacyPolicyPage />} />
+          <Route path="/termsOfService" element={<TermsOfServicePage />} />
+          {/* Add other routes here */}
 
-        <Route
-          path="/facebook-connect"
-          element={
-            <ProtectedRoute>
-              <FacebookPageConnect />
-            </ProtectedRoute>
-          }
-        />
-        {/* Catch all unmatched routes */}
-        <Route path="*" element={<ErrorPage404 />} />
-      </Routes>
-      <Footer />
+          <Route
+            path="/facebook-connect"
+            element={
+              <ProtectedRoute>
+                <FacebookPageConnect />
+              </ProtectedRoute>
+            }
+          />
+          {/* Catch all unmatched routes */}
+          <Route path="*" element={<ErrorPage404 />} />
+        </Routes>
+      
+        <Footer />
+      </SiteSettingsProvider>      
     </>
   );
 };

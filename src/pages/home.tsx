@@ -12,7 +12,6 @@ import { SiteSettingsProvider } from "../utils/SiteSettingsContext";
 const HomePage: React.FC = () => {
   return (
     <>
-    <SiteSettingsProvider>
       <Home />
       <FeaturedSection />
       <WhyWorkWithUs />
@@ -21,7 +20,6 @@ const HomePage: React.FC = () => {
       <AboutYourAgent />
       <StayUpToDate/>
       <ScrollToTopButton />
-    </SiteSettingsProvider>
     </>
   );
 };
