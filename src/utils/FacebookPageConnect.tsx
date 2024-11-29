@@ -157,3 +157,4 @@ const FacebookPageConnect = () => {
   );
 };
 
+export default FacebookPageConnect;
