@@ -7,7 +7,6 @@ import TestimonialSection from "../components/mra/TestimonialSection";
 import AboutYourAgent from "../components/mra/AboutYourAgentSection";
 import StayUpToDate from "../components/mra/StayUpToDateSection";
 import ScrollToTopButton from "../utils/ScrollToTopButton";
-import { SiteSettingsProvider } from "../utils/SiteSettingsContext";
 
 const HomePage: React.FC = () => {
   return (
