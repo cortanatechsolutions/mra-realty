@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import FacebookLogin from "react-facebook-login-lite";
 import axios from "axios";
 
 const API_URL = import.meta.env.VITE_REACT_APP_API_URL;
@@ -25,180 +24,136 @@ const loadFacebookSDK = (): Promise<void> => {
 const FacebookPageConnect = () => {
   const [isSdkInitialized, setIsSdkInitialized] = useState(false);
   const [userAccessToken, setUserAccessToken] = useState<string | null>(null);
+  const [pages, setPages] = useState<{ id: string; name: string }[]>([]);
+  const [selectedPageId, setSelectedPageId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
-
-  
-  const [facebookPages, setFacebookPages] = useState<any[]>([]);
-  const [selectedPage, setSelectedPage] = useState<any>(null);
-  const [isPageConnected, setIsPageConnected] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
+  const [isConnected, setIsConnected] = useState<boolean>(false);
 
-  // Load and initialize Facebook SDK
   useEffect(() => {
     const initializeFacebookSDK = async () => {
       await loadFacebookSDK();
-
       window.FB.init({
         appId: import.meta.env.VITE_REACT_APP_FACEBOOK_APP_ID || "",
         cookie: true,
         xfbml: true,
-        version: "v17.0", // Use your desired API version
+        version: "v17.0",
       });
-
       setIsSdkInitialized(true);
-      console.log("Facebook SDK Initialized");
     };
-
     initializeFacebookSDK();
   }, []);
 
-  // Handle Facebook login
   const handleLogin = () => {
     if (!isSdkInitialized) {
       setError("Facebook SDK is not yet initialized.");
       return;
     }
 
+    setLoading(true);
     window.FB.login(
       (response: fb.StatusResponse) => {
+        setLoading(false);
         if (response.authResponse) {
-          console.log("Logged in successfully:", response.authResponse);
           setUserAccessToken(response.authResponse.accessToken);
-          responseFacebook(response.authResponse);
+          fetchPages(response.authResponse.accessToken);
         } else {
           setError("Facebook login failed.");
         }
       },
-      { scope: "email,public_profile,pages_show_list" } // Permissions you need
+      { scope: "email,public_profile,pages_show_list,pages_read_engagement" }
     );
   };
 
-
-  // Facebook Login Success handler
-  const responseFacebook = async (response: any) => {
-    if (response.accessToken) {
-      setUserAccessToken(response.accessToken);
-      await fetchFacebookPages(response.accessToken);
-    } else {
-      setError("Facebook login failed. Please try again.");
-    }
-  };
-
-  // Fetch Facebook Pages for the logged-in user
-  const fetchFacebookPages = async (accessToken: string) => {
-    setLoading(true);
-    try {
-      const response = await axios.get(
-        `https://graph.facebook.com/me/accounts?access_token=${accessToken}`
-      );
-      if (response.data && response.data.data) {
-        setFacebookPages(response.data.data);
-      } else {
-        setError("No pages found for this user.");
+  const fetchPages = (accessToken: string) => {
+    window.FB.api(
+      "/me/accounts",
+      "get", // Change "GET" to "get"
+      { access_token: accessToken },
+      (response: any) => {
+        if (response && !response.error) {
+          const pagesData = response.data.map((page: any) => ({
+            id: page.id,
+            name: page.name,
+          }));
+          setPages(pagesData);
+        } else {
+          setError("Failed to fetch pages. Please try again.");
+        }
       }
-    } catch (err) {
-      setError("Error fetching pages. Please try again.");
-    } finally {
-      setLoading(false);
-    }
+    );    
   };
 
-  // Connect selected page to your service
-  const connectToService = async () => {
-    if (!selectedPage) {
-      setError("Please select a page to connect.");
+  const saveIntegration = async () => {
+    if (!userAccessToken || !selectedPageId) {
+      setError("Access token and page selection are required.");
       return;
     }
+
     setLoading(true);
     try {
-      const response = await axios.post(`${API_URL}/GetPageAccessToken`, {
-        pageId: selectedPage.id,
+      const response = await axios.post(`${API_URL}/SaveFbIntegration`, {
         userAccessToken,
+        pageId: selectedPageId,
       });
       if (response.data.success) {
-        setIsPageConnected(true);
-        setError(null); // Clear any previous error messages
+        setIsConnected(true);
+        setError(null);
       } else {
-        setError("Error connecting the page to the service.");
+        setError("Failed to save integration. Please try again.");
       }
     } catch (err) {
-      setError("Error connecting the page. Please try again.");
+      setError("Error saving integration. Please try again.");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <section className="">
-      <div id="Home" className="overflow-hidden py-10 sm:py-8">
-        <img
-          alt=""
-          src={`/images/web-banner.jpg`}
-          className="absolute inset-0 -z-10 h-full w-full object-cover sm:object-center"
-        />
-        <div className="max-w-sm pb-16 sm:max-w-6xl sm:pb-24 lg:pb-52 xl:pb-96">
-          <div className="pl-16 sm:pl-24 lg:pl-36 sm:pr-8 sm:pt-28">
-            <div className="sm:max-w-5xl">
-              <div className="text-left">
-                <h1 className="text-5xl font-semibold tracking-tight text-white sm:text-6xl lg:text-8xl">
-                  Connect Your Facebook Page
-                </h1>
-                {error && (
-                  <p className="sm:max-w-2xl mt-6 font-regular text-sm sm:text-lg lg:text-lg leading-8 text-white">
-                    {error}
-                  </p>
-                )}
-
-                {!userAccessToken ? (
-                  <button onClick={handleLogin} className="btn-login">
-                  Login with Facebook
-                  </button>
-                ) : (
-                  <div>
-                    <h2 className="text-xl text-white">Select a Facebook Page to Connect:</h2>
-                    {loading ? (
-                      <p className="text-white">Loading your pages...</p>
-                    ) : (
-                      <div>
-                        <select
-                          onChange={(e) =>
-                            setSelectedPage(
-                              facebookPages.find((page) => page.id === e.target.value)
-                            )
-                          }
-                          defaultValue=""
-                          className="w-full p-2 mt-4 mb-4 rounded-md"
-                        >
-                          <option value="" disabled>
-                            Select a page
-                          </option>
-                          {facebookPages.map((page) => (
-                            <option key={page.id} value={page.id}>
-                              {page.name}
-                            </option>
-                          ))}
-                        </select>
-
-                        <button
-                          onClick={connectToService}
-                          disabled={!selectedPage || loading}
-                          className="bg-blue-600 text-white py-2 px-4 rounded mt-4"
-                        >
-                          {loading ? "Connecting..." : isPageConnected ? "Page Connected!" : "Connect to Service"}
-                        </button>
-
-                        {isPageConnected && <p className="mt-4 text-white">Page connected successfully!</p>}
-                      </div>
-                    )}
-                  </div>
-                )}
-              </div>
+    <div>
+      {!userAccessToken ? (
+        <button
+          onClick={handleLogin}
+          className="bg-blue-600 text-white py-2 px-4 rounded mt-4"
+          disabled={loading}
+        >
+          {loading ? "Logging in..." : "Login with Facebook"}
+        </button>
+      ) : (
+        <div>
+          {pages.length > 0 ? (
+            <div>
+              <label>Select a Page:</label>
+              <select
+                onChange={(e) => setSelectedPageId(e.target.value)}
+                className="w-full p-2 mb-4 border border-gray-300 rounded-md"
+              >
+                <option value="">Select a page</option>
+                {pages.map((page) => (
+                  <option key={page.id} value={page.id}>
+                    {page.name}
+                  </option>
+                ))}
+              </select>
+              <button
+                onClick={saveIntegration}
+                className="bg-green-600 text-white py-2 px-4 rounded"
+                disabled={loading || isConnected}
+              >
+                {loading
+                  ? "Saving..."
+                  : isConnected
+                  ? "Integration Saved!"
+                  : "Save Integration"}
+              </button>
             </div>
-          </div>
+          ) : (
+            <p>Loading pages...</p>
+          )}
         </div>
-      </div>
-    </section>
+      )}
+      {error && <p className="text-red-600 mt-2">{error}</p>}
+    </div>
   );
 };
 
-export default FacebookPageConnect;
