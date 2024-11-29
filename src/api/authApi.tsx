@@ -15,7 +15,7 @@ export const getToken = async (
   try {
     const encryptedUsername = encryptText(username);
     const encryptedPassword = encryptText(password);
-    const response = await axios.post<TokenResponse>(`${API_URL}/gettoken`, {
+    const response = await axios.post<TokenResponse>(`${API_URL}/login`, {
       username: encryptedUsername,
       password: encryptedPassword,
     });

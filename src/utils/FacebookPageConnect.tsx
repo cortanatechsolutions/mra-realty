@@ -37,7 +37,7 @@ const FacebookPageConnect = () => {
         appId: import.meta.env.VITE_REACT_APP_FACEBOOK_APP_ID || "",
         cookie: true,
         xfbml: true,
-        version: "v17.0",
+        version: "v21.0",
       });
       setIsSdkInitialized(true);
     };
