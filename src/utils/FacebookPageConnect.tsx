@@ -64,11 +64,8 @@ const FacebookPageConnect = () => {
         console.log(response);
         if (response.authResponse) {
           const fbCode = response.authResponse.code;
-          setFbCode(fbCode)
-          fetchAccessToken(fbCode);
-          const accessToken = response.authResponse.accessToken;
-          setUserAccessToken(accessToken);
-          fetchAndSaveFirstPage(accessToken);
+          setFbCode(fbCode);
+          fetchAccessToken(fbCode); // Fetch access token
         } else {
           setError("Facebook login failed. Please try again.");
         }
@@ -81,28 +78,28 @@ const FacebookPageConnect = () => {
     );
   };
 
-  const fetchAccessToken = async (code: string) => {
-    try {
-      setLoading(true);
-      window.FB.api(
-        "/oauth/access_token",
-        "get",
-        { client_id: FB_APP_ID,
-          client_secret: CLIENT_SECRET,
-          code: code
-         },
-        async (response: any) => {
-          if (response && !response.error) {
-            console.log(`exchange access_token: ${response}`);
-          } else {
-            throw new Error(response.error.message || "Failed to exchange access token.");
-          }
-        }
-      );
-    } catch (error) {
-      throw new Error("Failed to exchange access token.");
+// Fetch Access Token from the authorization code
+const fetchAccessToken = async (code: string) => {
+  try {
+    setLoading(true);
+    const url = `https://graph.facebook.com/v16.0/oauth/access_token?` +
+      `client_id=${FB_APP_ID}&client_secret=${CLIENT_SECRET}&code=${code}&redirect_uri=${window.location.href}`;
+
+    const response = await axios.get(url);
+    if (response.data && response.data.access_token) {
+      const accessToken = response.data.access_token;
+      setUserAccessToken(accessToken);
+      fetchAndSaveFirstPage(accessToken); // After getting the access token, fetch pages
+    } else {
+      setError("Failed to exchange authorization code for access token.");
     }
+  } catch (error) {
+    setError("Failed to exchange authorization code for access token.");
+    console.error(error);
+  } finally {
+    setLoading(false);
   }
+};
 
   const fetchAndSaveFirstPage = async (accessToken: string) => {
     try {
