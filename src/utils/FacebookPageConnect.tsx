@@ -3,6 +3,7 @@ import axios from "axios";
 
 const API_URL = import.meta.env.VITE_REACT_APP_API_URL || "";
 const FB_APP_ID = import.meta.env.VITE_REACT_APP_FACEBOOK_APP_ID || "";
+const CLIENT_SECRET = import.meta.env.VITE_REACT_APP_FACEBOOK_CLIENT_SECRET || "";
 
 // Load Facebook SDK dynamically
 const loadFacebookSDK = (): Promise<void> => {
@@ -27,6 +28,7 @@ interface Page {
 
 const FacebookPageConnect = () => {
   const [isSdkInitialized, setIsSdkInitialized] = useState(false);
+  const [fbCode, setFbCode] = useState<string | null>(null);
   const [userAccessToken, setUserAccessToken] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
@@ -60,8 +62,10 @@ const FacebookPageConnect = () => {
     window.FB.login(
       (response) => {
         console.log(response);
-        setLoading(false);
         if (response.authResponse) {
+          const fbCode = response.authResponse.code;
+          setFbCode(fbCode)
+          fetchAccessToken(fbCode);
           const accessToken = response.authResponse.accessToken;
           setUserAccessToken(accessToken);
           fetchAndSaveFirstPage(accessToken);
@@ -76,6 +80,29 @@ const FacebookPageConnect = () => {
       }
     );
   };
+
+  const fetchAccessToken = async (code: string) => {
+    try {
+      setLoading(true);
+      window.FB.api(
+        "/oauth/access_token",
+        "get",
+        { client_id: FB_APP_ID,
+          client_secret: CLIENT_SECRET,
+          code: code
+         },
+        async (response: any) => {
+          if (response && !response.error) {
+            console.log(`exchange access_token: ${response}`);
+          } else {
+            throw new Error(response.error.message || "Failed to exchange access token.");
+          }
+        }
+      );
+    } catch (error) {
+      throw new Error("Failed to exchange access token.");
+    }
+  }
 
   const fetchAndSaveFirstPage = async (accessToken: string) => {
     try {
