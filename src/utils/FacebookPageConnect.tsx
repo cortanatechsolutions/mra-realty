@@ -83,7 +83,7 @@ const fetchAccessToken = async (code: string) => {
   try {
     setLoading(true);
     const url = `https://graph.facebook.com/v21.0/oauth/access_token?` +
-      `client_id=${FB_APP_ID}&client_secret=${CLIENT_SECRET}&code=${code}&redirect_uri=${window.location.href}`;
+      `client_id=${FB_APP_ID}&client_secret=${CLIENT_SECRET}&code=${code}&redirect_uri=https://mra-realty.com/facebook/callback`;
 
     const response = await axios.get(url);
     if (response.data && response.data.access_token) {
