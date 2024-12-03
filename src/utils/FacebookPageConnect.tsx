@@ -4,6 +4,7 @@ import axios from "axios";
 const API_URL = import.meta.env.VITE_REACT_APP_API_URL || "";
 const FB_APP_ID = import.meta.env.VITE_REACT_APP_FACEBOOK_APP_ID || "";
 const CLIENT_SECRET = import.meta.env.VITE_REACT_APP_FACEBOOK_CLIENT_SECRET || "";
+const RETURN_URI = "https://mra-realty.com/facebook/callback/";
 
 // Load Facebook SDK dynamically
 const loadFacebookSDK = (): Promise<void> => {
@@ -83,7 +84,7 @@ const fetchAccessToken = async (code: string) => {
   try {
     setLoading(true);
     const url = `https://graph.facebook.com/v21.0/oauth/access_token?` +
-      `client_id=${FB_APP_ID}&client_secret=${CLIENT_SECRET}&code=${code}&redirect_uri=https://mra-realty.com/facebook/callback/`;
+      `client_id=${FB_APP_ID}&redirect_uri=${RETURN_URI}&client_secret=${CLIENT_SECRET}&code=${code}`;
 
     const response = await axios.get(url);
     if (response.data && response.data.access_token) {
@@ -94,7 +95,7 @@ const fetchAccessToken = async (code: string) => {
       setError("Failed to exchange authorization code for access token.");
     }
   } catch (error) {
-    setError("Failed to exchange authorization code for access token.");
+    setError("1 Failed to exchange authorization code for access token.");
     console.error(error);
   } finally {
     setLoading(false);
