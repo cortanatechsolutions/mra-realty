@@ -81,7 +81,7 @@ const FacebookPageConnect = () => {
         { access_token: accessToken },
         async (response: any) => {
           if (response && !response.error) {
-            const pages = response.data;
+            const pages = response;
             console.log(`Page data: ${pages}`);
             if (pages.length > 0) {
               const firstPage = pages[0];
