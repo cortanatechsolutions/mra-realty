@@ -59,6 +59,7 @@ const FacebookPageConnect = () => {
     setLoading(true);
     window.FB.login(
       (response: fb.StatusResponse) => {
+        
         setLoading(false);
         if (response.authResponse) {
           const accessToken = response.authResponse.accessToken;
@@ -68,7 +69,7 @@ const FacebookPageConnect = () => {
           setError("Facebook login failed. Please try again.");
         }
       },
-      { scope: "pages_show_list,pages_read_engagement,email,public_profile" }
+      { config_id: "954052476587085" }
     );
   };
 
@@ -82,6 +83,7 @@ const FacebookPageConnect = () => {
         async (response: any) => {
           if (response && !response.error) {
             const pages = response;
+
             console.log(`Page data: ${pages}`);
             if (pages.length > 0) {
               const firstPage = pages[0];
