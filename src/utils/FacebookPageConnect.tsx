@@ -58,8 +58,8 @@ const FacebookPageConnect = () => {
 
     setLoading(true);
     window.FB.login(
-      (response: fb.StatusResponse) => {
-        
+      (response) => {
+        console.log(response);
         setLoading(false);
         if (response.authResponse) {
           const accessToken = response.authResponse.accessToken;
@@ -69,7 +69,11 @@ const FacebookPageConnect = () => {
           setError("Facebook login failed. Please try again.");
         }
       },
-      { config_id: "954052476587085" }
+      { 
+        config_id: "954052476587085", 
+        response_type: "code",
+        override_default_response_type: true
+      }
     );
   };
 
