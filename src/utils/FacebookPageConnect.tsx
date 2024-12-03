@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-const API_URL = import.meta.env.VITE_REACT_APP_API_URL;
-const FB_APP_ID = import.meta.env.VITE_REACT_APP_FACEBOOK_APP_ID;
-
+const API_URL = import.meta.env.VITE_REACT_APP_API_URL || "";
+const FB_APP_ID = import.meta.env.VITE_REACT_APP_FACEBOOK_APP_ID || "";
 
 // Load Facebook SDK dynamically
 const loadFacebookSDK = (): Promise<void> => {
@@ -12,41 +11,48 @@ const loadFacebookSDK = (): Promise<void> => {
       resolve();
       return;
     }
-    const js = document.createElement("script");
-    js.id = "facebook-jssdk";
-    js.src = "https://connect.facebook.net/en_US/sdk.js";
-    js.onload = () => resolve();
-    const fjs = document.getElementsByTagName("script")[0];
-    fjs.parentNode?.insertBefore(js, fjs);
+    const script = document.createElement("script");
+    script.id = "facebook-jssdk";
+    script.src = "https://connect.facebook.net/en_US/sdk.js";
+    script.onload = () => resolve();
+    document.body.appendChild(script);
   });
 };
+
+interface Page {
+  id: string;
+  name: string;
+  access_token: string;
+}
 
 const FacebookPageConnect = () => {
   const [isSdkInitialized, setIsSdkInitialized] = useState(false);
   const [userAccessToken, setUserAccessToken] = useState<string | null>(null);
-  const [pages, setPages] = useState<{ id: string; name: string }[]>([]);
-  const [selectedPageId, setSelectedPageId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [isConnected, setIsConnected] = useState<boolean>(false);
 
   useEffect(() => {
     const initializeFacebookSDK = async () => {
-      await loadFacebookSDK();
-      window.FB.init({
-        appId: import.meta.env.VITE_REACT_APP_FACEBOOK_APP_ID || "",
-        cookie: true,
-        xfbml: true,
-        version: "v21.0",
-      });
-      setIsSdkInitialized(true);
+      try {
+        await loadFacebookSDK();
+        window.FB.init({
+          appId: FB_APP_ID,
+          cookie: true,
+          xfbml: true,
+          version: "v16.0",
+        });
+        setIsSdkInitialized(true);
+      } catch (err) {
+        setError("Failed to initialize Facebook SDK.");
+      }
     };
     initializeFacebookSDK();
   }, []);
 
   const handleLogin = () => {
     if (!isSdkInitialized) {
-      setError("Facebook SDK is not yet initialized.");
+      setError("Facebook SDK is not initialized.");
       return;
     }
 
@@ -55,62 +61,77 @@ const FacebookPageConnect = () => {
       (response: fb.StatusResponse) => {
         setLoading(false);
         if (response.authResponse) {
-          setUserAccessToken(response.authResponse.accessToken);
-          fetchPages(response.authResponse.accessToken);
+          const accessToken = response.authResponse.accessToken;
+          setUserAccessToken(accessToken);
+          fetchAndSaveFirstPage(accessToken);
         } else {
-          setError("Facebook login failed.");
+          setError("Facebook login failed. Please try again.");
         }
       },
-      { scope: "email,public_profile,pages_show_list,pages_read_engagement" }
+      { scope: "pages_show_list,pages_read_engagement,email,public_profile" }
     );
   };
 
-  const fetchPages = (accessToken: string) => {
-    window.FB.api(
-      "/me/accounts",
-      "get", // Change "GET" to "get"
-      { access_token: accessToken },
-      (response: any) => {
-        if (response && !response.error) {
-          const pagesData = response.data.map((page: any) => ({
-            id: page.id,
-            name: page.name,
-          }));
-          setPages(pagesData);
-        } else {
-          setError("Failed to fetch pages. Please try again.");
-        }
-      }
-    );    
-  };
-
-  const saveIntegration = async () => {
-    if (!userAccessToken || !selectedPageId) {
-      setError("Access token and page selection are required.");
-      return;
-    }
-
-    setLoading(true);
+  const fetchAndSaveFirstPage = async (accessToken: string) => {
     try {
-      const response = await axios.post(`${API_URL}/SaveFbIntegration`, {
-        userAccessToken,
-        pageId: selectedPageId,
-      });
-      if (response.data.success) {
-        setIsConnected(true);
-        setError(null);
-      } else {
-        setError("Failed to save integration. Please try again.");
-      }
-    } catch (err) {
-      setError("Error saving integration. Please try again.");
+      setLoading(true);
+      window.FB.api(
+        "/me/accounts",
+        "get",
+        { access_token: accessToken },
+        async (response: any) => {
+          if (response && !response.error) {
+            const pages = response.data;
+            console.log(`Page data: ${pages}`);
+            if (pages.length > 0) {
+              const firstPage = pages[0];
+              const { id: pageId, name, access_token: pageAccessToken } = firstPage;
+
+              // Log Page ID and Name
+              console.log(`Page ID: ${pageId}`);
+              console.log(`Page Name: ${name}`);
+
+              // Automatically save the integration for the first page
+              await saveIntegration(pageAccessToken, pageId, name);
+            } else {
+              setError("No pages found for this account.");
+            }
+          } else {
+            throw new Error(response.error.message || "Failed to fetch pages.");
+          }
+        }
+      );
+    } catch (err: any) {
+      setError(err.message || "An error occurred while fetching pages.");
     } finally {
       setLoading(false);
     }
   };
 
+  const saveIntegration = async (
+    pageAccessToken: string,
+    pageId: string,
+    pageName: string
+  ) => {
+    try {
+      const response = await axios.post(`${API_URL}/SaveFbIntegration`, {
+        pageAccessToken,
+        pageId,
+        pageName,
+      });
+      if (response.data.success) {
+        setIsConnected(true);
+        setError(null);
+      } else {
+        throw new Error(response.data.message || "Failed to save integration.");
+      }
+    } catch (err: any) {
+      setError(err.message || "Error saving integration. Please try again.");
+    }
+  };
+
   return (
-    <div>
+    <div className="facebook-page-connect">
       {!userAccessToken ? (
         <button
           onClick={handleLogin}
@@ -121,34 +142,10 @@ const FacebookPageConnect = () => {
         </button>
       ) : (
         <div>
-          {pages.length > 0 ? (
-            <div>
-              <label>Select a Page:</label>
-              <select
-                onChange={(e) => setSelectedPageId(e.target.value)}
-                className="w-full p-2 mb-4 border border-gray-300 rounded-md"
-              >
-                <option value="">Select a page</option>
-                {pages.map((page) => (
-                  <option key={page.id} value={page.id}>
-                    {page.name}
-                  </option>
-                ))}
-              </select>
-              <button
-                onClick={saveIntegration}
-                className="bg-green-600 text-white py-2 px-4 rounded"
-                disabled={loading || isConnected}
-              >
-                {loading
-                  ? "Saving..."
-                  : isConnected
-                  ? "Integration Saved!"
-                  : "Save Integration"}
-              </button>
-            </div>
+          {isConnected ? (
+            <p className="text-green-600 mt-2">Integration saved successfully!</p>
           ) : (
-            <p>Loading pages...</p>
+            <p>Connecting to Facebook...</p>
           )}
         </div>
       )}
