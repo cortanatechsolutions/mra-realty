@@ -10,7 +10,7 @@ const WhyWorkWithUs: React.FC = () => {
     <section className="bg-white py-16 px-4 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto text-center">
         <div className="mb-8">
-          <h2 className="text-2xl font-semibold text-gray-800">Why work with us?</h2>
+          <h2 className="text-4xl font-semibold text-gray-800">Why work with us?</h2>
           <p className="text-gray-600 mt-2">Here are three reasons why</p>
         </div>
         <div className="flex flex-wrap justify-center items-center gap-8">
