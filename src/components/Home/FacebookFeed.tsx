@@ -9,12 +9,8 @@ interface Post {
   full_picture?: string;
 }
 
-interface PageFeedData {
-  posts: Post[];
-}
-
 const FacebookFeed: React.FC = () => {
-  const [data, setData] = useState<PageFeedData | null>(null);
+  const [data, setData] = useState<Post[]>([]);
   const [visiblePosts, setVisiblePosts] = useState<Post[]>([]);
   const [visibleCount, setVisibleCount] = useState(3);
   const [isLoading, setIsLoading] = useState(true);
@@ -23,9 +19,9 @@ const FacebookFeed: React.FC = () => {
     const loadPosts = async () => {
       setIsLoading(true);
       try {
-        const data = await fetchPageFeed();
-        setData(data);
-        setVisiblePosts(data.posts.slice(0, visibleCount));
+        const fetchedData = await fetchPageFeed();
+        setData(fetchedData.posts || []);
+        setVisiblePosts(fetchedData.posts.slice(0, visibleCount));
       } catch (error) {
         console.error("Error fetching page feed:", error);
       } finally {
@@ -33,10 +29,16 @@ const FacebookFeed: React.FC = () => {
       }
     };
     loadPosts();
-  }, [visibleCount]);
+  }, []);
+
+  useEffect(() => {
+    if (data?.length) {
+      setVisiblePosts(data.slice(0, visibleCount));
+    }
+  }, [visibleCount, data]);
 
   const loadMorePosts = () => {
-    setVisibleCount((prevCount) => prevCount + 3);
+    setVisibleCount((prevCount) => Math.min(prevCount + 3, data.length));
   };
 
   if (isLoading) {
@@ -46,52 +48,39 @@ const FacebookFeed: React.FC = () => {
         className="relative isolate overflow-hidden py-10 sm:py-20 bg-white dark:bg-gray-900"
       >
         <div className="max-w-6xl mx-auto text-center">
-          <div className="mx-auto max-w-6xl lg:mx-0">
-            <h2 className="text-4xl font-semibold text-gray-800">
-              Our Latest Announcements
-            </h2>
-          </div>
-          <div className="mx-auto mt-10">
-            {/* Responsive Flexbox */}
-            <div className="flex flex-wrap gap-4 justify-center z-0">
+          <h2 className="text-4xl font-semibold text-gray-800">
+            Our Latest Announcements
+          </h2>
+          <div className="flex flex-wrap gap-4 justify-center z-0 mt-10">
             {Array.from({ length: 3 }).map((_, index) => (
               <div
                 key={index}
-                className="relative border rounded-lg shadow-md bg-white dark:bg-gray-800 flex flex-col h-full animate-fadeIn w-full md:w-[calc(50%-1rem)] xl:w-[calc(33.333%-1rem)] transform transition-transform duration-300 hover:translate-y-[-5px] z-10"
-                  style={{
-                    flex: "1 0 calc(33.333% - 1rem)",
-                    minWidth: "300px",
-                  }}
+                className="relative border rounded-lg shadow-md bg-white dark:bg-gray-800 flex flex-col h-full animate-fadeIn w-full md:w-[calc(50%-1rem)] xl:w-[calc(33.333%-1rem)]"
+                style={{ flex: "1 0 calc(33.333% - 1rem)", minWidth: "300px" }}
               >
                 <Skeleton height={180} />
                 <Skeleton count={3} />
               </div>
             ))}
           </div>
-          </div>
         </div>
       </section>
     );
   }
 
-  if (!data?.posts?.length) {
+  if (!data.length) {
     return (
       <section
         id="Updates"
         className="relative isolate overflow-hidden py-10 sm:py-20 bg-white dark:bg-gray-900"
       >
         <div className="max-w-6xl mx-auto text-center">
-          <div className="mx-auto max-w-6xl lg:mx-0">
-            <h2 className="text-4xl font-semibold text-gray-800">
-              Our Latest Announcements
-            </h2>
-          </div>
-          <div className="mx-auto mt-10">
-            {/* No posts message */}
-            <p className="text-xl text-gray-500 dark:text-gray-400">
-              Content will be available shortly. Please check back soon!
-            </p>
-          </div>
+          <h2 className="text-4xl font-semibold text-gray-800">
+            Our Latest Announcements
+          </h2>
+          <p className="text-xl text-gray-500 dark:text-gray-400 mt-10">
+            Content will be available shortly. Please check back soon!
+          </p>
         </div>
       </section>
     );
@@ -103,50 +92,38 @@ const FacebookFeed: React.FC = () => {
       className="relative isolate overflow-hidden py-10 sm:py-20 bg-white dark:bg-gray-900"
     >
       <div className="max-w-6xl mx-auto text-center">
-        <div className="mx-auto max-w-6xl lg:mx-0">
-          <h2 className="text-4xl font-semibold text-gray-800">
-            Our Latest Announcements
-          </h2>
-        </div>
-        <div className="mx-auto mt-10">
-          {/* Responsive Flexbox */}
-          <div className="flex flex-wrap gap-4 justify-center z-0">
+        <h2 className="text-4xl font-semibold text-gray-800">
+          Our Latest Announcements
+        </h2>
+        <div className="flex flex-wrap gap-4 justify-center z-0 mt-10">
           {visiblePosts.map((post) => (
             <div
               key={post.id}
-              className="relative border rounded-lg shadow-md bg-white dark:bg-gray-800 flex flex-col h-full animate-fadeIn w-full md:w-[calc(50%-1rem)] xl:w-[calc(33.333%-1rem)] transform transition-transform duration-300 hover:translate-y-[-5px] z-10"
-                style={{ flex: "1 0 calc(33.333% - 1rem)", minWidth: "300px" }}
+              className="relative border rounded-lg shadow-md bg-white dark:bg-gray-800 flex flex-col h-full animate-fadeIn w-full md:w-[calc(50%-1rem)] xl:w-[calc(33.333%-1rem)]"
+              style={{ flex: "1 0 calc(33.333% - 1rem)", minWidth: "300px" }}
             >
               <a
-                  key={post.id}
-                  href={`https://www.facebook.com/${post.id}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{
-                    flex: "1 0 calc(33.333% - 1rem)",
-                    minWidth: "300px",
-                  }}
-                >
-              {/* Image on top */}
-              {post.full_picture && (
-                <img
-                  className="w-full h-[200px] object-cover rounded-t-lg"
-                  src={post.full_picture}
-                  alt="Post media"
-                />
-              )}
-              {/* Text below */}
-              <div className="p-4 text-gray-800 dark:text-gray-100">
-                {post.message && (
-                  <p className="leading-normal break-words">{post.message}</p>
+                href={`https://www.facebook.com/${post.id}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {post.full_picture && (
+                  <img
+                    className="w-full h-[200px] object-cover rounded-t-lg"
+                    src={post.full_picture}
+                    alt="Post media"
+                  />
                 )}
-              </div>
+                <div className="p-4 text-gray-800 dark:text-gray-100">
+                  {post.message && (
+                    <p className="leading-normal break-words">{post.message}</p>
+                  )}
+                </div>
               </a>
             </div>
           ))}
         </div>
-        </div>
-        {visiblePosts.length < data.posts.length && (
+        {visiblePosts.length < data.length && (
           <div className="flex justify-center mt-6">
             <button
               onClick={loadMorePosts}

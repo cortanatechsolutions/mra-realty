@@ -7,10 +7,10 @@ export default defineConfig({
   build: {
     outDir: 'dist' // Default build output for Vite
   },
-/*    server: {
+   server: {
     https: {
       key: fs.readFileSync('./localhost.key.pem'),
       cert: fs.readFileSync('./localhost.cert.pem'),
     },
-  },  */
+  }, 
 });
