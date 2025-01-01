@@ -3,7 +3,7 @@ import { useSiteSettings } from '../../utils/SiteSettingsContext';
 
 const Footer: React.FC = () => {
   const { settings, getSetting } = useSiteSettings();
-  const emailTo = getSetting("email");
+  const emailTo = getSetting("Email");
   const officialFbPage = getSetting("OfficialFBPage");
   const officialViberNumber = getSetting("OfficialContactNumber");
   return (
