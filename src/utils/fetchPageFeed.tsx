@@ -1,62 +1,55 @@
 import axios from "axios";
 import api from "./api";
 
-const PAGE_ID = import.meta.env.VITE_REACT_APP_FACEBOOK_FACEBOOK_PAGEID;
-const API_URL = import.meta.env.VITE_REACT_APP_API_URL;
+const PAGE_ID = import.meta.env.VITE_REACT_APP_FACEBOOK_FACEBOOK_PAGEID || "";
+const USER_ACCESS_TOKEN = "userAccessToken"; // actual token is not necessary
+
+// Fields Constants
+const POST_FIELDS = "id,message,full_picture";
 
 // Function to fetch Facebook page feed
 export const fetchPageFeed = async () => {
   try {
-    const pageId = import.meta.env.VITE_REACT_APP_FACEBOOK_FACEBOOK_PAGEID || "";
-    var facebookPageAccessToken = localStorage.getItem("facebookToken");
-    if (facebookPageAccessToken == undefined) {
-      const facebookPageAccessTokenResponse = await api.post(
-        `/GetFacebookPageAccessToken`, null, { params: {
-          pageId: pageId,
-          userAccessToken: "default",
-        }
-        });
+    // Get token from local storage or fetch a new one
+    let facebookPageAccessToken = localStorage.getItem("facebookToken");
 
-      localStorage.setItem(
-        "facebookToken",
-        facebookPageAccessTokenResponse.data.accessToken
+    if (!facebookPageAccessToken) {
+      const tokenResponse = await api.post(
+        `/GetFacebookPageAccessToken`,
+        null,
+        {
+          params: {
+            pageId: PAGE_ID,
+            userAccessToken: USER_ACCESS_TOKEN,
+            newToken: false,
+          },
+        }
       );
-      facebookPageAccessToken =
-        facebookPageAccessTokenResponse.data.accessToken;
+
+      facebookPageAccessToken = tokenResponse.data.accessToken;
+      localStorage.setItem("facebookToken", facebookPageAccessToken);
     }
 
-    // Fetch page profile picture
-    const pageInfoResponse = await axios.get(
-      `https://graph.facebook.com/${PAGE_ID}`,
-      {
-        params: {
-          access_token: facebookPageAccessToken,
-          fields: "picture{url},name,link", // Request page profile picture URL, name, and link
-        },
-      }
-    );
-
-    // Fetch page posts
+    // Fetch page posts with minimal required fields
     const postsResponse = await axios.get(
       `https://graph.facebook.com/${PAGE_ID}/posts`,
       {
         params: {
           access_token: facebookPageAccessToken,
-          fields:
-            "id,message,created_time,picture,full_picture,attachments{media_type,media},reactions.summary(total_count),comments.summary(total_count),shares,video_tags,videos{source,description,thumbnails}",
+          fields: POST_FIELDS,
         },
       }
     );
 
-    // Combine data
+    // Return only the posts
     return {
-      profilePictureUrl: pageInfoResponse.data.picture.data.url,
-      pageName: pageInfoResponse.data.name,
-      pageUrl: pageInfoResponse.data.link, // Include the page URL
-      posts: postsResponse.data.data,
+      posts: postsResponse.data.data || [],
     };
   } catch (error) {
-    console.error("Error fetching page feed:", error);
-    return { profilePictureUrl: "", pageName: "", pageUrl: "", posts: [] }; // Include pageUrl in error case
+    console.error("Error fetching page feed:", {
+      message: error.message,
+      response: error.response?.data,
+    });
+    return { posts: [] };
   }
 };
