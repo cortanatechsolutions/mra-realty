@@ -23,3 +23,7 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+Create-HttpsCert.ps1
+localhost.cert.pem
+localhost.key.pem
+localhost.pfx

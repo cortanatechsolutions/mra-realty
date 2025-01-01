@@ -1,16 +1,21 @@
 import axios from "axios";
+import api from "./api";
 
-const PAGE_ID = "161490932676778";
+const PAGE_ID = import.meta.env.VITE_REACT_APP_FACEBOOK_FACEBOOK_PAGEID;
 const API_URL = import.meta.env.VITE_REACT_APP_API_URL;
 
 // Function to fetch Facebook page feed
 export const fetchPageFeed = async () => {
   try {
+    const pageId = import.meta.env.VITE_REACT_APP_FACEBOOK_FACEBOOK_PAGEID || "";
     var facebookPageAccessToken = localStorage.getItem("facebookToken");
     if (facebookPageAccessToken == undefined) {
-      const facebookPageAccessTokenResponse = await axios.post(
-        `${API_URL}/GetPageAccessToken`
-      );
+      const facebookPageAccessTokenResponse = await api.post(
+        `/GetFacebookPageAccessToken`, null, { params: {
+          pageId: pageId,
+          userAccessToken: "default",
+        }
+        });
 
       localStorage.setItem(
         "facebookToken",

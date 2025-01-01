@@ -1,0 +1,81 @@
+/* Fullscreen overlay */
+.fullscreen-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #1877f2, #3b5998);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    color: #ffffff;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  /* Loader container */
+  .loader-container {
+    text-align: center;
+    animation: fadeIn 0.5s ease-in-out;
+  }
+  
+  /* Animated loader */
+  .loader {
+    border: 4px solid rgba(255, 255, 255, 0.2);
+    border-top: 4px solid #ffffff;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    animation: spin 1s linear infinite;
+    margin: 20px auto;
+  }
+  
+  /* Loader animation */
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  
+  /* Fade-in animation */
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+  
+  /* Text styling for messages */
+  .status-message {
+    font-size: 1.2rem;
+    font-weight: 500;
+    letter-spacing: 1px;
+    margin-top: 20px;
+  }
+  
+  /* Error message styling */
+  .error-container {
+    text-align: center;
+  }
+  
+  .error-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    animation: fadeIn 0.5s ease-in-out;
+  }
+  
+  .error-message {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #ffcccc;
+    margin-top: 0.5rem;
+  }
+  

@@ -54,7 +54,7 @@ const Home: React.FC = () => {
         <div className="pb-16 pr-20 sm:max-w-6xl sm:pb-24 lg:pb-52 xl:pb-96">
           <div className="pl-16 sm:pl-24 lg:pl-36 sm:pr-8 sm:pt-28">
             <div className="text-left">
-              <h1 className="text-5xl font-semibold tracking-tight text-white sm:text-6xl lg:text-8xl">
+              <h1 className="text-4xl font-semibold tracking-tight text-white sm:text-5xl lg:text-7xl">
                 {getSetting("HeroHeaderText")}
               </h1>
               <p className="sm:max-w-2xl mt-6 font-regular text-sm sm:text-lg lg:text-lg leading-8 text-white">
