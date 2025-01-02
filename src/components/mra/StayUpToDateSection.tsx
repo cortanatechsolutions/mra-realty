@@ -4,6 +4,7 @@ import { sendEmail } from '../../services/emailService';
 import { EmailModel } from '../../models/EmailModel';
 import { logMessage } from '../../hooks/logger';
 import { useSiteSettings } from '../../utils/SiteSettingsContext';
+import { getToken } from '../../api/authApi';
 
 const StayUpToDate: React.FC = () => {
   const { settings, getSetting } = useSiteSettings();
@@ -116,6 +117,15 @@ const StayUpToDate: React.FC = () => {
         bccEmails: [],
         attachments: [],
       };
+
+      //ensure user has valid token
+      const authToken = localStorage.getItem("token");
+      if (!authToken) {
+        await getToken(
+          import.meta.env.VITE_REACT_APP_AUTH_USERNAME!,
+          import.meta.env.VITE_REACT_APP_AUTH_PASSWORD!
+        );
+      }      
 
       setSending(true);
 
